@@ -1,5 +1,4 @@
 
-
 import React, { useState } from 'react';
 import { StorySegment, VocabularyWord } from '../types';
 import { VOCABULARY_DATA } from '../constants';

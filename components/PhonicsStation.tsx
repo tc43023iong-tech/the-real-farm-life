@@ -110,4 +110,20 @@ export const PhonicsStation: React.FC<PhonicsStationProps> = ({ rules }) => {
                                    <div className={`w-20 h-20 ${theme.accent} rounded-full flex items-center justify-center text-4xl mb-1 group-hover:scale-110 transition-transform duration-300`}>
                                        {displayEmoji}
                                    </div>
-                                   <div className="w-
+                                   <div className="w-full">
+                                       <p className={`text-2xl md:text-3xl font-black ${theme.text} leading-none mb-1 font-['Comic_Neue']`}>{cleanWord}</p>
+                                       {vocab && <p className="text-gray-400 font-bold font-['Noto_Sans_TC'] text-sm">{vocab.chinese}</p>}
+                                   </div>
+                               </div>
+                           )
+                       })}
+                   </div>
+               </div>
+
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
