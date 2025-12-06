@@ -1,18 +1,60 @@
 
-import React from 'react';
-import { speakText } from '../services/geminiService';
+import React, { useState } from 'react';
 
 export const LanguageFocusSection: React.FC = () => {
-  
-  const play = (text: string) => {
-    speakText(text);
+  const [quizIndex, setQuizIndex] = useState(0);
+  const [showFeedback, setShowFeedback] = useState<'correct' | 'incorrect' | null>(null);
+
+  const quizQuestions = [
+    {
+        q: "I like ice cream ___ it is sweet.",
+        ans: "because",
+        options: ["because", "first", "no way"]
+    },
+    {
+        q: "1. First, we buy a ticket. 2. ___ we go inside.",
+        ans: "Then",
+        options: ["Because", "First", "Then"]
+    },
+    {
+        q: "I want a toy ___ I like it.",
+        ans: "because",
+        options: ["then", "but", "because"]
+    },
+    {
+        q: "1. First, wash hands. 2. Then, eat. 3. ___ clean up.",
+        ans: "Finally",
+        options: ["First", "Because", "Finally"]
+    },
+    {
+        q: "I am happy ___ it is sunny.",
+        ans: "because",
+        options: ["finally", "because", "first"]
+    },
+    {
+        q: "1. First, I wake up. 2. ___, I brush teeth.",
+        ans: "Next",
+        options: ["Next", "First", "Because"]
+    }
+  ];
+
+  const handleAnswer = (option: string) => {
+      if (option === quizQuestions[quizIndex].ans) {
+          setShowFeedback('correct');
+          setTimeout(() => {
+              setShowFeedback(null);
+              setQuizIndex(prev => (prev + 1) % quizQuestions.length);
+          }, 1500);
+      } else {
+          setShowFeedback('incorrect');
+          setTimeout(() => setShowFeedback(null), 1000);
+      }
   };
 
   return (
     <div className="max-w-4xl mx-auto pb-36 space-y-8">
       <div className="text-center bg-fuchsia-100 p-6 rounded-[3rem] border-8 border-fuchsia-300 transform rotate-1">
         <h2 className="text-5xl font-black text-fuchsia-800 tracking-tight">Language Focus 🧠</h2>
-        <p className="text-3xl text-fuchsia-700 font-bold mt-2">Let's learn sentence power! (句式練習)</p>
       </div>
 
       {/* Focus 1: Because */}
@@ -30,8 +72,7 @@ export const LanguageFocusSection: React.FC = () => {
             <div className="flex flex-col md:flex-row items-center justify-center gap-2">
                 {/* Action */}
                 <div 
-                    onClick={() => play("I want to go to the farm")}
-                    className="flex-1 bg-blue-50 border-4 border-blue-200 p-4 rounded-3xl cursor-pointer hover:bg-blue-100 transition-colors w-full text-center"
+                    className="flex-1 bg-blue-50 border-4 border-blue-200 p-4 rounded-3xl w-full text-center"
                 >
                     <div className="text-5xl mb-1">🚜</div>
                     <p className="text-3xl font-bold text-blue-800 leading-tight">I want to go to the farm</p>
@@ -45,8 +86,7 @@ export const LanguageFocusSection: React.FC = () => {
 
                 {/* Reason */}
                 <div 
-                    onClick={() => play("I want to feed animals")}
-                    className="flex-1 bg-green-50 border-4 border-green-200 p-4 rounded-3xl cursor-pointer hover:bg-green-100 transition-colors w-full text-center"
+                    className="flex-1 bg-green-50 border-4 border-green-200 p-4 rounded-3xl w-full text-center"
                 >
                     <div className="text-5xl mb-1">🐮</div>
                     <p className="text-3xl font-bold text-green-800 leading-tight">I want to feed animals</p>
@@ -54,13 +94,10 @@ export const LanguageFocusSection: React.FC = () => {
                 </div>
             </div>
 
-            <div className="mt-6 text-center">
-                <button 
-                    onClick={() => play("I want to go to the farm because I want to feed animals.")}
-                    className="bg-pink-400 hover:bg-pink-500 text-white text-2xl font-bold py-3 px-8 rounded-2xl shadow-md transition-transform active:scale-95 flex items-center gap-2 mx-auto"
-                >
-                    🔊 Read Whole Sentence
-                </button>
+            <div className="mt-6 p-4 bg-pink-50 rounded-2xl text-center">
+                 <p className="text-2xl text-pink-800 font-bold font-['Comic_Neue']">
+                   "I want to go to the farm because I want to feed animals."
+                 </p>
             </div>
          </div>
       </section>
@@ -79,14 +116,11 @@ export const LanguageFocusSection: React.FC = () => {
              <div className="space-y-3 relative">
                  
                  {/* Step 1 */}
-                 <div 
-                    className="flex gap-4 items-center group cursor-pointer"
-                    onClick={() => play("First, I want to build a sandcastle.")}
-                 >
-                     <div className="w-16 h-16 md:w-20 md:h-20 bg-indigo-500 rounded-full flex items-center justify-center text-white font-black text-xl z-10 shadow-lg group-hover:scale-110 transition-transform shrink-0">
+                 <div className="flex gap-4 items-center group">
+                     <div className="w-16 h-16 md:w-20 md:h-20 bg-indigo-500 rounded-full flex items-center justify-center text-white font-black text-xl z-10 shadow-lg shrink-0">
                          First
                      </div>
-                     <div className="bg-indigo-50 p-4 rounded-3xl border-2 border-indigo-100 flex-1 group-hover:bg-indigo-100 transition-colors">
+                     <div className="bg-indigo-50 p-4 rounded-3xl border-2 border-indigo-100 flex-1">
                          <div className="flex items-center gap-4">
                             <span className="text-5xl">🏰</span>
                             <div>
@@ -98,15 +132,12 @@ export const LanguageFocusSection: React.FC = () => {
                  </div>
 
                  {/* Step 2 */}
-                 <div 
-                    className="flex gap-4 items-center group cursor-pointer"
-                    onClick={() => play("Next, I want to look at shells.")}
-                 >
-                     <div className="w-16 h-16 md:w-20 md:h-20 bg-sky-400 rounded-full flex flex-col items-center justify-center text-white font-black text-sm md:text-xl z-10 shadow-lg group-hover:scale-110 transition-transform shrink-0 leading-tight">
+                 <div className="flex gap-4 items-center group">
+                     <div className="w-16 h-16 md:w-20 md:h-20 bg-sky-400 rounded-full flex flex-col items-center justify-center text-white font-black text-sm md:text-xl z-10 shadow-lg shrink-0 leading-tight">
                          <span>Then /</span>
                          <span>Next</span>
                      </div>
-                     <div className="bg-sky-50 p-4 rounded-3xl border-2 border-sky-100 flex-1 group-hover:bg-sky-100 transition-colors">
+                     <div className="bg-sky-50 p-4 rounded-3xl border-2 border-sky-100 flex-1">
                          <div className="flex items-center gap-4">
                             <span className="text-5xl">🐚</span>
                             <div>
@@ -118,14 +149,11 @@ export const LanguageFocusSection: React.FC = () => {
                  </div>
 
                  {/* Step 3 */}
-                 <div 
-                    className="flex gap-4 items-center group cursor-pointer"
-                    onClick={() => play("Finally, I want to have a picnic.")}
-                 >
-                     <div className="w-16 h-16 md:w-20 md:h-20 bg-purple-500 rounded-full flex items-center justify-center text-white font-black text-sm md:text-xl z-10 shadow-lg group-hover:scale-110 transition-transform shrink-0">
+                 <div className="flex gap-4 items-center group">
+                     <div className="w-16 h-16 md:w-20 md:h-20 bg-purple-500 rounded-full flex items-center justify-center text-white font-black text-sm md:text-xl z-10 shadow-lg shrink-0">
                          Finally
                      </div>
-                     <div className="bg-purple-50 p-4 rounded-3xl border-2 border-purple-100 flex-1 group-hover:bg-purple-100 transition-colors">
+                     <div className="bg-purple-50 p-4 rounded-3xl border-2 border-purple-100 flex-1">
                          <div className="flex items-center gap-4">
                             <span className="text-5xl">🧺</span>
                             <div>
@@ -137,6 +165,45 @@ export const LanguageFocusSection: React.FC = () => {
                  </div>
 
              </div>
+         </div>
+      </section>
+
+      {/* Grammar Mini Game */}
+      <section className="pt-8">
+         <div className="bg-yellow-50 rounded-[3rem] p-8 border-4 border-yellow-300 shadow-xl relative text-center">
+            <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-yellow-400 text-white px-8 py-2 rounded-full font-black text-2xl shadow-md border-4 border-white">
+                Mini Quiz 🎮
+            </div>
+
+            <div className="mt-8 mb-6">
+                <p className="text-3xl font-bold text-gray-800 font-['Comic_Neue'] mb-4 leading-relaxed">
+                    {quizQuestions[quizIndex].q.split('___').map((part, i, arr) => (
+                        <span key={i}>
+                            {part}
+                            {i < arr.length - 1 && (
+                                <span className="inline-block px-4 py-1 border-b-4 border-dashed border-gray-400 mx-2 text-fuchsia-600 font-black bg-white rounded-lg">
+                                    {showFeedback === 'correct' ? quizQuestions[quizIndex].ans : '?'}
+                                </span>
+                            )}
+                        </span>
+                    ))}
+                </p>
+                {showFeedback === 'correct' && <div className="text-6xl animate-bounce">✅</div>}
+                {showFeedback === 'incorrect' && <div className="text-6xl animate-shake">❌</div>}
+            </div>
+
+            <div className="flex flex-wrap justify-center gap-4">
+                {quizQuestions[quizIndex].options.map((opt) => (
+                    <button
+                        key={opt}
+                        onClick={() => handleAnswer(opt)}
+                        disabled={showFeedback !== null}
+                        className="bg-white border-b-4 border-yellow-200 text-yellow-800 px-8 py-4 rounded-2xl text-2xl font-bold hover:bg-yellow-100 hover:-translate-y-1 active:border-b-0 active:translate-y-1 transition-all shadow-sm"
+                    >
+                        {opt}
+                    </button>
+                ))}
+            </div>
          </div>
       </section>
 

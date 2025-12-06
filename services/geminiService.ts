@@ -1,3 +1,4 @@
+
 import { GoogleGenAI, Modality } from "@google/genai";
 
 // Audio Context Helper
@@ -43,14 +44,24 @@ async function decodeAudioData(
   return buffer;
 }
 
+// Safely get API key without crashing if process is undefined
+const getApiKey = () => {
+  try {
+    // @ts-ignore
+    return (typeof process !== 'undefined' && process.env) ? process.env.API_KEY : '';
+  } catch (e) {
+    return '';
+  }
+};
+
 export const speakText = async (text: string): Promise<void> => {
-  if (!process.env.API_KEY) {
-    console.error("API Key missing");
-    alert("Please check your API configuration.");
+  const apiKey = getApiKey();
+  if (!apiKey) {
+    console.warn("API Key missing or environment not configured");
     return;
   }
 
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const ai = new GoogleGenAI({ apiKey: apiKey });
   const ctx = getAudioContext();
 
   // Resume context if suspended (browser autoplay policy)
@@ -66,7 +77,7 @@ export const speakText = async (text: string): Promise<void> => {
         responseModalities: [Modality.AUDIO],
         speechConfig: {
           voiceConfig: {
-            prebuiltVoiceConfig: { voiceName: 'Puck' }, // Puck is usually friendly/neutral
+            prebuiltVoiceConfig: { voiceName: 'Puck' },
           },
         },
       },
@@ -92,6 +103,6 @@ export const speakText = async (text: string): Promise<void> => {
 
   } catch (error) {
     console.error("Error generating speech:", error);
-    throw error;
+    // Don't throw to avoid crashing UI if API fails
   }
 };

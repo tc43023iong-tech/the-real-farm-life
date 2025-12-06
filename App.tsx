@@ -6,31 +6,32 @@ import { StoryReader } from './components/StoryReader';
 import { VocabularyList } from './components/VocabularyList';
 import { PhonicsStation } from './components/PhonicsStation';
 import { ValuesSection } from './components/ValuesSection';
-import { WarmUpSection } from './components/WarmUpSection';
+import { WarmUpChat } from './components/WarmUpChat';
 import { PostReadingSection } from './components/PostReadingSection';
 import { LanguageFocusSection } from './components/LanguageFocusSection';
 
 const App: React.FC = () => {
-  const [viewMode, setViewMode] = useState<ViewMode>(ViewMode.WARMUP);
+  // Defaulting to VOCABULARY as it's now the first item
+  const [viewMode, setViewMode] = useState<ViewMode>(ViewMode.VOCABULARY);
 
   const renderContent = () => {
     switch (viewMode) {
-      case ViewMode.WARMUP:
-        return <WarmUpSection />;
+      case ViewMode.VOCABULARY:
+        return <VocabularyList words={VOCABULARY_DATA} />;
+      case ViewMode.LANGUAGE_FOCUS:
+        return <LanguageFocusSection />;
+      case ViewMode.WARMUP_QA:
+        return <WarmUpChat />;
       case ViewMode.READING:
         return <StoryReader storyData={STORY_DATA} />;
       case ViewMode.POST_READING:
         return <PostReadingSection />;
-      case ViewMode.VOCABULARY:
-        return <VocabularyList words={VOCABULARY_DATA} />;
       case ViewMode.PHONICS:
         return <PhonicsStation rules={PHONICS_DATA} />;
-      case ViewMode.LANGUAGE_FOCUS:
-        return <LanguageFocusSection />;
       case ViewMode.VALUES:
         return <ValuesSection />;
       default:
-        return <StoryReader storyData={STORY_DATA} />;
+        return <VocabularyList words={VOCABULARY_DATA} />;
     }
   };
 
@@ -38,6 +39,7 @@ const App: React.FC = () => {
     <button
       onClick={() => {
         setViewMode(mode);
+        window.scrollTo(0, 0);
       }}
       className={`
         flex flex-col items-center justify-center p-2 rounded-2xl transition-all w-full min-w-[60px]
@@ -72,22 +74,31 @@ const App: React.FC = () => {
         </div>
       </header>
 
-      {/* Main Content Area */}
-      <main className="max-w-5xl mx-auto px-4 py-8">
+      {/* Main Content Area - Expanded max-w to 7xl for wider vocab list */}
+      <main className="max-w-7xl mx-auto px-4 py-8">
         {renderContent()}
       </main>
 
-      {/* Persistent Bottom Navigation (Mobile First approach) */}
+      {/* Persistent Bottom Navigation */}
       <div className="fixed bottom-0 left-0 right-0 p-2 z-50 pointer-events-none">
         <div className="max-w-5xl mx-auto bg-white/95 backdrop-blur-xl shadow-2xl rounded-3xl p-2 border-4 border-white pointer-events-auto overflow-x-auto">
-          {/* Updated Order: Warm Up -> Grammar -> Story -> Quiz -> Words -> Sounds -> Values */}
-          <div className="grid grid-cols-7 gap-1 md:gap-2 min-w-[320px]">
+          {/* 
+             Nav Order: 
+             1. Words (Vocabulary) + Match
+             2. Grammar (Language Focus)
+             3. Chat (WarmUp QA)
+             4. Story (Reading)
+             5. Quiz (Post Reading)
+             6. Sounds (Phonics)
+             7. Values 
+          */}
+          <div className="grid grid-cols-7 gap-1 md:gap-2 min-w-[500px]">
             <NavButton 
-              mode={ViewMode.WARMUP} 
-              icon="🔥" 
-              label="Warm Up" 
-              colorClass="bg-orange-400"
-              borderColorClass="border-orange-200"
+              mode={ViewMode.VOCABULARY} 
+              icon="🍎" 
+              label="Words" 
+              colorClass="bg-green-400" 
+              borderColorClass="border-green-200"
             />
             <NavButton 
               mode={ViewMode.LANGUAGE_FOCUS} 
@@ -95,6 +106,13 @@ const App: React.FC = () => {
               label="Grammar" 
               colorClass="bg-fuchsia-400" 
               borderColorClass="border-fuchsia-200"
+            />
+             <NavButton 
+              mode={ViewMode.WARMUP_QA} 
+              icon="💬" 
+              label="Chat" 
+              colorClass="bg-purple-400"
+              borderColorClass="border-purple-200"
             />
             <NavButton 
               mode={ViewMode.READING} 
@@ -109,13 +127,6 @@ const App: React.FC = () => {
               label="Quiz" 
               colorClass="bg-teal-400"
               borderColorClass="border-teal-200"
-            />
-            <NavButton 
-              mode={ViewMode.VOCABULARY} 
-              icon="🍎" 
-              label="Words" 
-              colorClass="bg-green-400" 
-              borderColorClass="border-green-200"
             />
             <NavButton 
               mode={ViewMode.PHONICS} 

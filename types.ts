@@ -1,12 +1,13 @@
 
 export enum ViewMode {
-  WARMUP = 'WARMUP',
-  READING = 'READING',
   VOCABULARY = 'VOCABULARY',
+  LANGUAGE_FOCUS = 'LANGUAGE_FOCUS',
+  WARMUP_GAME = 'WARMUP_GAME',
+  WARMUP_QA = 'WARMUP_QA',
+  READING = 'READING',
+  POST_READING = 'POST_READING',
   PHONICS = 'PHONICS',
   VALUES = 'VALUES',
-  POST_READING = 'POST_READING',
-  LANGUAGE_FOCUS = 'LANGUAGE_FOCUS'
 }
 
 export interface StorySegment {
@@ -15,6 +16,7 @@ export interface StorySegment {
   text: string;
   chinese: string;
   type: 'dialogue' | 'narrative';
+  side?: 'left' | 'right'; // Explicitly control alignment
 }
 
 export interface VocabularyWord {
@@ -24,6 +26,8 @@ export interface VocabularyWord {
   example: string;
   image: string; // URL to image
   emoji?: string; // Emoji for decoration
+  hideFromList?: boolean; // If true, do not show in the Vocabulary List view
+  noStoryHighlight?: boolean; // If true, do not highlight/make interactive in Story view
 }
 
 export interface PhonicsRule {

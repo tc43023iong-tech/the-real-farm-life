@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { PhonicsRule, VocabularyWord } from '../types';
-import { speakText } from '../services/geminiService';
 import { VOCABULARY_DATA } from '../constants';
 
 interface PhonicsStationProps {
@@ -12,88 +11,103 @@ export const PhonicsStation: React.FC<PhonicsStationProps> = ({ rules }) => {
   
   // Helper to find the real vocab object
   const getVocab = (wordWithEmoji: string): VocabularyWord | undefined => {
+    // Remove emoji to match key
     const cleanWord = wordWithEmoji.replace(/[^a-zA-Z]/g, '').toLowerCase();
     return VOCABULARY_DATA.find(v => v.word.toLowerCase() === cleanWord);
   };
 
-  const handleCardClick = (wordWithEmoji: string) => {
-    const cleanWord = wordWithEmoji.replace(/[^a-zA-Z]/g, '');
-    speakText(cleanWord);
+  // Define fresh pastel color themes for the cards
+  const getTheme = (index: number) => {
+    const themes = [
+      { 
+        bg: 'bg-rose-50', 
+        border: 'border-rose-200', 
+        text: 'text-rose-600', 
+        accent: 'bg-rose-100', 
+        icon: 'text-rose-400',
+        shadow: 'shadow-rose-100'
+      },
+      { 
+        bg: 'bg-sky-50', 
+        border: 'border-sky-200', 
+        text: 'text-sky-600', 
+        accent: 'bg-sky-100', 
+        icon: 'text-sky-400',
+        shadow: 'shadow-sky-100'
+      },
+      { 
+        bg: 'bg-amber-50', 
+        border: 'border-amber-200', 
+        text: 'text-amber-600', 
+        accent: 'bg-amber-100', 
+        icon: 'text-amber-400',
+        shadow: 'shadow-amber-100'
+      },
+    ];
+    return themes[index % themes.length];
   };
 
   return (
-    <div className="max-w-6xl mx-auto pb-32 space-y-16">
-      <div className="text-center bg-white/60 p-8 rounded-[3rem] backdrop-blur-sm shadow-md">
-        <h2 className="text-5xl font-black text-indigo-600 mb-4 tracking-tight">Phonics Fun! 🎵</h2>
-        <p className="text-3xl text-indigo-800 font-bold">Listen and learn the sounds!</p>
+    <div className="max-w-6xl mx-auto pb-40 px-4 space-y-12">
+      
+      {/* Playful Header */}
+      <div className="text-center relative py-8">
+         {/* Abstract Blob background */}
+         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-32 bg-yellow-200/40 rounded-[100%] blur-3xl -z-10"></div>
+         <h2 className="relative text-6xl font-black text-indigo-800 tracking-tight drop-shadow-sm mb-4 transform -rotate-2">
+            Phonics Fun! 🎵
+         </h2>
+         <p className="text-2xl text-indigo-500 font-bold font-['Comic_Neue'] bg-white/80 inline-block px-8 py-2 rounded-full backdrop-blur-sm border-4 border-indigo-50 shadow-sm">
+            Listen & Say 👂🗣️
+         </p>
       </div>
 
-      <div className="space-y-12">
-        {rules.map((rule) => (
-          <div key={rule.symbol} className="bg-white rounded-[3rem] p-8 md:p-12 shadow-2xl border-4 border-indigo-100 flex flex-col md:flex-row gap-10">
-            
-            {/* Left: The Rule Info */}
-            <div className="md:w-1/3 flex flex-col items-center justify-center text-center space-y-6 md:border-r-4 md:border-indigo-50 md:pr-10">
-               <div 
-                 className="cursor-pointer group relative"
-                 onClick={() => speakText(`${rule.soundName}. ${rule.symbol}.`)}
-               >
-                  <div className="text-9xl font-black text-indigo-500 mb-2 transform group-hover:scale-110 transition-transform drop-shadow-sm">{rule.symbol}</div>
-                  <div className="absolute top-0 right-0 text-4xl animate-bounce opacity-0 group-hover:opacity-100 transition-opacity">🔊</div>
+      <div className="space-y-16">
+        {rules.map((rule, index) => {
+          const theme = getTheme(index);
+          
+          return (
+            <div key={rule.symbol} className={`relative ${theme.bg} rounded-[3rem] p-8 md:p-10 border-[6px] ${theme.border} shadow-2xl flex flex-col lg:flex-row gap-8 lg:gap-16 items-center overflow-hidden`}>
+               
+               {/* Decorative Background Symbol */}
+               <div className={`absolute -right-10 -bottom-10 text-[12rem] font-black ${theme.text} opacity-5 pointer-events-none select-none`}>
+                   {rule.symbol}
                </div>
-               
-               <div className="bg-indigo-50 px-6 py-2 rounded-full">
-                  <span className="text-5xl text-indigo-400 font-mono font-bold">{rule.soundName}</span>
-               </div>
-               
-               <p className="text-2xl text-gray-500 italic bg-white p-4 rounded-2xl border-2 border-indigo-50 w-full shadow-sm">
-                 "{rule.description}"
-               </p>
-               
-               <button 
-                  onClick={() => speakText(`${rule.soundName}. ${rule.symbol}.`)}
-                  className="bg-indigo-400 hover:bg-indigo-500 text-white rounded-full p-4 w-full text-xl font-bold shadow-md transition-all active:scale-95"
-               >
-                 Play Sound 🔊
-               </button>
-            </div>
 
-            {/* Right: The Words Grid */}
-            <div className="md:w-2/3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 content-center">
-               {rule.examples.map((wordStr) => {
-                 const vocab = getVocab(wordStr);
-                 // Determine emoji: vocab emoji > string emoji > fallback
-                 const displayEmoji = vocab?.emoji || wordStr.match(/[\p{Emoji}\u200d]+/u)?.[0] || '🎵';
-                 // Clean word for display
-                 const cleanWord = vocab ? vocab.word : wordStr.replace(/[\p{Emoji}\u200d]+/u, '').trim();
-
-                 return (
-                   <div 
-                     key={wordStr}
-                     onClick={() => handleCardClick(wordStr)}
-                     className="bg-white border-4 border-indigo-50 rounded-[2rem] overflow-hidden hover:border-indigo-300 hover:shadow-xl hover:-translate-y-2 transition-all cursor-pointer group flex flex-col"
-                   >
-                      <div className="h-40 bg-indigo-50 flex items-center justify-center relative overflow-hidden">
-                         <span className="text-9xl transform group-hover:scale-110 transition-transform duration-300 drop-shadow-md select-none filter">
-                           {displayEmoji}
-                         </span>
-                         <div className="absolute top-2 right-2 bg-white/90 rounded-full w-10 h-10 flex items-center justify-center text-xl shadow-sm opacity-0 group-hover:opacity-100 transition-opacity">🔊</div>
-                      </div>
-                      
-                      <div className="p-4 text-center flex-1 flex flex-col justify-center gap-1">
-                         <h4 className="text-3xl font-black text-gray-800 font-['Comic_Neue']">{cleanWord}</h4>
-                         {vocab && (
-                           <p className="text-xl font-bold text-indigo-600 font-['Noto_Sans_TC']">{vocab.chinese}</p>
-                         )}
-                      </div>
+               {/* Left: The Sound Identity (Sticker Style) */}
+               <div className="lg:w-1/3 flex flex-col items-center text-center space-y-6 relative z-10">
+                   {/* Circle Badge for Symbol */}
+                   <div className={`w-48 h-48 ${theme.accent} rounded-full flex flex-col items-center justify-center border-8 border-white shadow-xl transform hover:scale-105 transition-transform duration-300`}>
+                       <span className={`text-7xl font-black ${theme.icon} tracking-tighter`}>{rule.symbol}</span>
+                       <span className="text-gray-400 text-lg font-bold mt-1">sound</span>
                    </div>
-                 );
-               })}
-            </div>
+                   
+                   {/* IPA Sound Bubble */}
+                   <div className="bg-white px-8 py-2 rounded-xl border-b-4 border-gray-200">
+                       <span className="text-3xl font-mono text-gray-600 font-bold">{rule.soundName}</span>
+                   </div>
 
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
+                   {/* Description Speech Bubble */}
+                   <div className="relative bg-white p-5 rounded-3xl border-2 border-dashed border-gray-300 shadow-sm w-full max-w-xs">
+                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-white border-t-2 border-l-2 border-dashed border-gray-300 transform rotate-45"></div>
+                        <p className="text-lg text-gray-500 font-bold font-['Noto_Sans_TC'] leading-tight">
+                            {rule.description}
+                        </p>
+                   </div>
+               </div>
+
+               {/* Right: The Words Showcase (Tiles) */}
+               <div className="lg:w-2/3 w-full relative z-10">
+                   <div className="grid grid-cols-2 gap-5">
+                       {rule.examples.map((wordStr) => {
+                           const vocab = getVocab(wordStr);
+                           // Use vocab emoji or fallback
+                           const displayEmoji = vocab?.emoji || wordStr.match(/[\p{Emoji}\u200d]+/u)?.[0] || '✨';
+                           const cleanWord = vocab ? vocab.word : wordStr.replace(/[\p{Emoji}\u200d]+/u, '').trim();
+                           
+                           return (
+                               <div key={wordStr} className="group bg-white rounded-[2.5rem] p-4 border-4 border-transparent hover:border-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center justify-center gap-2 cursor-pointer h-full min-h-[160px]">
+                                   <div className={`w-20 h-20 ${theme.accent} rounded-full flex items-center justify-center text-4xl mb-1 group-hover:scale-110 transition-transform duration-300`}>
+                                       {displayEmoji}
+                                   </div>
+                                   <div className="w-

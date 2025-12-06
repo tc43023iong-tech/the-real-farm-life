@@ -1,45 +1,59 @@
 
+
 import { PhonicsRule, StorySegment, VocabularyWord, WarmUpQuestion } from "./types";
 
 export const STORY_DATA: StorySegment[] = [
   {
     id: "s1",
     type: "narrative",
-    text: "Jacky and his family are making plans for an outing (郊遊) 🎒 on Saturday.",
+    text: "Jacky and his family are making plans (計畫) for an outing (郊遊) 🎒 on Saturday.",
     chinese: "Jacky 和他的家人正在計劃週六的郊遊。"
   },
   {
     id: "s2",
-    speaker: "Family",
+    speaker: "Dad",
     type: "dialogue",
-    text: "What should we do on Saturday? 📅",
+    side: "left",
+    text: "What should (應該) we do on Saturday? 📅",
     chinese: "我們週六應該做什麼？"
   },
   {
     id: "s3",
     speaker: "Mum",
     type: "dialogue",
-    text: "Let's go to the beach (海灘) 🏖️. I want to go swimming 🏊‍♀️.",
-    chinese: "我們去海灘吧。我想去游泳。"
+    side: "right",
+    text: "Let's go to the beach 🏖️.|I want to go swimming (去游泳) 🏊‍♀️.",
+    chinese: "我們去海灘吧。|我想去游泳。"
   },
   {
     id: "s4",
-    speaker: "Brother",
+    speaker: "Sister",
     type: "dialogue",
-    text: "Good idea! I want to look at shells (貝殼) 🐚 and build a sandcastle (沙堡) 🏰.",
-    chinese: "好主意！我想去看貝殼和堆沙堡。"
+    side: "left",
+    text: "Good idea!|I want to look at shells (觀賞貝殼) 🐚 and build (建造) a sandcastle (沙堡) 🏰.",
+    chinese: "好主意！|我想去看貝殼和堆沙堡。"
+  },
+  {
+    id: "s4_new",
+    speaker: "Dad",
+    type: "dialogue",
+    side: "right",
+    text: "Jacky?",
+    chinese: "Jacky 呢？"
   },
   {
     id: "s5",
     speaker: "Jacky",
     type: "dialogue",
-    text: "I want to stay home 🏠 because I want to play my new game, Farm Life 🎮. I can build my own farm. I can feed animals 🐷, pick fruit (水果) 🍎 and ride horses 🐎!",
-    chinese: "我想待在家裡，因為我想玩我的新遊戲《農場生活》。我可以建自己的農場。我可以餵動物、摘水果和騎馬！"
+    side: "left",
+    text: "I want to stay home 🏠 because I want to play my new game, Farm Life 🎮.|I can build (建造) my own (自己的) farm.|I can feed animals (餵飼動物) 🐷, pick fruit (摘水果) 🍎 and ride horses (騎馬) 🐎!",
+    chinese: "我想待在家裡，因為我想玩我的新遊戲《農場生活》。|我可以建自己的農場。|我可以餵動物、摘水果和騎馬！"
   },
   {
     id: "s6",
-    speaker: "Sister",
+    speaker: "Mum",
     type: "dialogue",
+    side: "right",
     text: "Boo! 👎 😒",
     chinese: "噓！(反對的聲音)"
   },
@@ -47,6 +61,7 @@ export const STORY_DATA: StorySegment[] = [
     id: "s7",
     speaker: "Sister",
     type: "dialogue",
+    side: "left",
     text: "Double boo! 👎👎 😒😒",
     chinese: "雙重噓！"
   },
@@ -54,33 +69,37 @@ export const STORY_DATA: StorySegment[] = [
     id: "s8",
     speaker: "Dad",
     type: "dialogue",
-    text: "I have an idea 💡. Let's go to a real farm (農場) 🚜.",
-    chinese: "我有個主意。我們去真正的農場吧。"
+    side: "right",
+    text: "I have an idea 💡.|Let's go to a real (真實的) farm 🚜.",
+    chinese: "我有個主意。|我們去真正的農場吧。"
   },
   {
     id: "s9",
-    speaker: "Family",
+    speaker: "Mum",
     type: "dialogue",
-    text: "Sounds like fun! 🤩",
+    side: "left",
+    text: "Sounds (聽起來) 👂 like fun! 🤩",
     chinese: "聽起來很有趣！"
   },
   {
     id: "s10",
     speaker: "Jacky",
     type: "dialogue",
-    text: "Triple boo! 👎👎👎 😒😒😒",
+    side: "right", 
+    text: "Triple (三倍) 3️⃣ boo! 👎👎👎 😒😒😒",
     chinese: "三重噓！"
   },
   {
     id: "s11",
     type: "narrative",
-    text: "On Saturday, Dad says, 'Leave your phone 📱 at home please, Jacky.'",
+    text: "On Saturday, Dad says, 'Leave (留下) your phone (電話) 📱 at home please, Jacky.'",
     chinese: "週六，爸爸說：「Jacky，請把你的手機留在家裡。」"
   },
   {
     id: "s12",
     speaker: "Jacky",
     type: "dialogue",
+    side: "left",
     text: "'I don't want to go to a farm because it's boring (無聊) 🥱!' says Jacky.",
     chinese: "Jacky 說：「我不想去農場，因為那很無聊！」"
   },
@@ -88,31 +107,45 @@ export const STORY_DATA: StorySegment[] = [
     id: "s13",
     speaker: "Dad",
     type: "dialogue",
+    side: "right",
     text: "'Come on! Let's go!' Dad says.",
     chinese: "爸爸說：「來吧！我們走！」"
   },
   {
-    id: "s14",
+    id: "s14a",
     type: "narrative",
-    text: "At the farm, the family go on a tour. First, they feed cows 🐄. Jacky feels the cows' wet tongue (舌頭) 👅 on his hands.",
-    chinese: "在農場，家人進行參觀。首先，他們餵牛。Jacky 感覺到牛濕濕的舌頭在他手上。"
+    text: "At the farm, the family go on a tour.",
+    chinese: "在農場，家人進行參觀。"
+  },
+  {
+    id: "s14b",
+    type: "narrative",
+    text: "First, they feed cows 🐄.|Jacky feels (觸摸) the cows' wet (濕的) tongue (舌頭) 👅 on his hands.",
+    chinese: "首先，他們餵牛。|Jacky 感覺到牛濕濕的舌頭在他手上。"
   },
   {
     id: "s15",
     type: "narrative",
-    text: "Then, they pick and eat apples 🍎. The apples are fresh (新鮮) ✨ and sweet.",
-    chinese: "然後，他們摘蘋果吃。蘋果又新鮮又甜。"
+    text: "Then, they pick and eat apples 🍎.|The apples are fresh ✨ and sweet.",
+    chinese: "然後，他們摘蘋果吃。|蘋果又新鮮又甜。"
   },
   {
-    id: "s16",
+    id: "s16a",
     type: "narrative",
-    text: "Next, they ride horses 🐎. Finally, they have a barbecue (燒烤) 🍖. The chicken wings 🍗 and sweet potatoes 🍠 are yummy!",
-    chinese: "接著，他們騎馬。最後，他們烤肉。雞翅和番薯真好吃！"
+    text: "Next, they ride horses 🐎.",
+    chinese: "接著，他們騎馬。"
+  },
+  {
+    id: "s16b",
+    type: "narrative",
+    text: "Finally, they have a barbecue (燒烤) 🍖.|The chicken wings 🍗 and sweet potatoes (番薯) 🍠 are yummy!",
+    chinese: "最後，他們烤肉。|雞翅和番薯真好吃！"
   },
   {
     id: "s17",
     speaker: "Mum",
     type: "dialogue",
+    side: "left",
     text: "'Do you still want to play Farm Life?' Mum asks.",
     chinese: "媽媽問：「你還想玩《農場生活》嗎？」"
   },
@@ -120,108 +153,28 @@ export const STORY_DATA: StorySegment[] = [
     id: "s18",
     speaker: "Jacky",
     type: "dialogue",
-    text: "'No way! 🙅‍♂️' Jacky says. 'Can we come again next weekend?'",
+    side: "right",
+    text: "'No way (絕不) 🙅‍♂️!' Jacky says. 'Can we come again next weekend (週末)?'",
     chinese: "Jacky 說：「才不要！我們下週末可以再來嗎？」"
   },
 ];
 
 export const VOCABULARY_DATA: VocabularyWord[] = [
+  // --- 1-12 Outdoor Activities (User Provided) ---
   { 
-    word: "boo", 
-    emoji: "👎",
-    phonetic: "/buː/", 
-    chinese: "噓! (喝倒彩/不贊同)", 
-    example: "People say 'Boo!' when they don't like something.",
-    image: "https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?auto=format&fit=crop&q=80&w=400"
+    word: "outdoor activities", 
+    emoji: "🏞️",
+    phonetic: "/ˌaʊtˈdɔːr ækˈtɪvətiz/", 
+    chinese: "戶外活動 (activity)", 
+    example: "We love outdoor activities.",
+    image: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&q=80&w=400"
   },
-  { 
-    word: "outing", 
-    emoji: "🎒",
-    phonetic: "/ˈaʊtɪŋ/", 
-    chinese: "郊遊", 
-    example: "We plan an outing to the park.",
-    image: "https://images.unsplash.com/photo-1596464716127-f9a0859b4afd?auto=format&fit=crop&q=80&w=400"
-  },
-  { 
-    word: "sandcastle", 
-    emoji: "🏰",
-    phonetic: "/ˈsændˌkæsəl/", 
-    chinese: "沙堡", 
-    example: "I build a sandcastle on the beach.",
-    image: "https://images.unsplash.com/photo-1599597276711-2d7fd5a62f52?auto=format&fit=crop&q=80&w=400"
-  },
-  { 
-    word: "beach", 
-    emoji: "🏖️",
-    phonetic: "/biːtʃ/", 
-    chinese: "海灘", 
-    example: "The sand is hot.",
-    image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=400"
-  },
-  { 
-    word: "shells", 
-    emoji: "🐚",
-    phonetic: "/ʃɛlz/", 
-    chinese: "貝殼", 
-    example: "Look at this pretty shell.",
-    image: "https://images.unsplash.com/photo-1596463059283-da2572b83981?auto=format&fit=crop&q=80&w=400"
-  },
-  { 
-    word: "tongue", 
-    emoji: "👅",
-    phonetic: "/tʌŋ/", 
-    chinese: "舌頭", 
-    example: "The cow has a long tongue.",
-    image: "https://images.unsplash.com/photo-1616428359216-24c5222956f1?auto=format&fit=crop&q=80&w=400"
-  },
-  { 
-    word: "barbecue", 
-    emoji: "🍖",
-    phonetic: "/ˈbɑːrbɪkjuː/", 
-    chinese: "燒烤 (BBQ)", 
-    example: "We eat chicken wings at the barbecue.",
-    image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&q=80&w=400"
-  },
-  { 
-    word: "boring", 
-    emoji: "🥱",
-    phonetic: "/ˈbɔːrɪŋ/", 
-    chinese: "無聊的", 
-    example: "This game is not boring, it is fun!",
-    image: "https://images.unsplash.com/photo-1502444330042-d1a1ddf9bb5b?auto=format&fit=crop&q=80&w=400"
-  },
-  { 
-    word: "fresh", 
-    emoji: "✨",
-    phonetic: "/freʃ/", 
-    chinese: "新鮮的", 
-    example: "The apples are fresh.",
-    image: "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&q=80&w=400"
-  },
-  { 
-    word: "farm", 
-    emoji: "🚜",
-    phonetic: "/fɑːrm/", 
-    chinese: "農場", 
-    example: "The animals live on the farm.",
-    image: "https://images.unsplash.com/photo-1444858291040-58f756a3bdd6?auto=format&fit=crop&q=80&w=400"
-  },
-  { 
-    word: "fruit", 
-    emoji: "🍎",
-    phonetic: "/fruːt/", 
-    chinese: "水果", 
-    example: "Apples and oranges are fruit.",
-    image: "https://images.unsplash.com/photo-1619566636858-adf3ef46400b?auto=format&fit=crop&q=80&w=400"
-  },
-  
-  // Warm Up Specific Phrases
   { 
     word: "plant vegetables", 
     emoji: "🥕",
-    phonetic: "/plænt ˈvɛdʒtəbəlz/", 
-    chinese: "種植蔬菜", 
-    example: "Farmers plant vegetables.",
+    phonetic: "/plɑːnt ˈvedʒtəbəlz/", 
+    chinese: "種植蔬菜 (vegetable)", 
+    example: "We plant vegetables in the garden.",
     image: "https://images.unsplash.com/photo-1592419044706-39796d40f98c?auto=format&fit=crop&q=80&w=400"
   },
   { 
@@ -235,39 +188,39 @@ export const VOCABULARY_DATA: VocabularyWord[] = [
   { 
     word: "feed animals", 
     emoji: "🐄",
-    phonetic: "/fiːd ˈænɪməlz/", 
-    chinese: "餵動物", 
+    phonetic: "/fiːd ˈænəməlz/", 
+    chinese: "餵飼動物 (animal)", 
     example: "I like to feed animals.",
     image: "https://images.unsplash.com/photo-1534981146460-70803c407c57?auto=format&fit=crop&q=80&w=400"
   },
   { 
     word: "ride a horse", 
     emoji: "🏇",
-    phonetic: "/raɪd ə hɔːrs/", 
+    phonetic: "/raɪd ə hɔːs/", 
     chinese: "騎馬", 
     example: "Can you ride a horse?",
     image: "https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?auto=format&fit=crop&q=80&w=400"
   },
   { 
     word: "build a sandcastle", 
-    emoji: "🏖️",
-    phonetic: "/bɪld ə ˈsændˌkæsəl/", 
-    chinese: "堆沙堡", 
+    emoji: "🏰",
+    phonetic: "/bɪld ə ˈsændˌkɑːsəl/", 
+    chinese: "堆沙城堡", 
     example: "We build a sandcastle on the beach.",
     image: "https://images.unsplash.com/photo-1599597276711-2d7fd5a62f52?auto=format&fit=crop&q=80&w=400"
   },
   { 
     word: "look at shells", 
     emoji: "🐚",
-    phonetic: "/lʊk æt ʃɛlz/", 
-    chinese: "看貝殼", 
+    phonetic: "/lʊk ət ʃelz/", 
+    chinese: "觀賞貝殼 (shell)", 
     example: "I look at shells in the sand.",
     image: "https://images.unsplash.com/photo-1596463059283-da2572b83981?auto=format&fit=crop&q=80&w=400"
   },
   { 
     word: "go swimming", 
     emoji: "🏊",
-    phonetic: "/ɡoʊ ˈswɪmɪŋ/", 
+    phonetic: "/ɡəʊ ˈswɪmɪŋ/", 
     chinese: "去游泳", 
     example: "I want to go swimming in the sea.",
     image: "https://images.unsplash.com/photo-1530549387789-4c1017266635?auto=format&fit=crop&q=80&w=400"
@@ -275,23 +228,23 @@ export const VOCABULARY_DATA: VocabularyWord[] = [
   { 
     word: "take photos", 
     emoji: "📸",
-    phonetic: "/teɪk ˈfoʊtoʊz/", 
-    chinese: "拍照", 
+    phonetic: "/teɪk ˈfəʊtəʊz/", 
+    chinese: "拍照 (photo)", 
     example: "Mum likes to take photos.",
     image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&q=80&w=400"
   },
   { 
     word: "have a picnic", 
     emoji: "🧺",
-    phonetic: "/hæv ə ˈpɪknɪk/", 
-    chinese: "去野餐", 
+    phonetic: "/həv ə ˈpɪknɪk/", 
+    chinese: "野餐", 
     example: "We have a picnic in the park.",
     image: "https://images.unsplash.com/photo-1592881269389-c4547902d33b?auto=format&fit=crop&q=80&w=400"
   },
   { 
     word: "go camping", 
     emoji: "⛺",
-    phonetic: "/ɡoʊ ˈkæmpɪŋ/", 
+    phonetic: "/ɡəʊ ˈkæmpɪŋ/", 
     chinese: "去露營", 
     example: "We go camping in the holiday.",
     image: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?auto=format&fit=crop&q=80&w=400"
@@ -299,84 +252,300 @@ export const VOCABULARY_DATA: VocabularyWord[] = [
   { 
     word: "have a barbecue", 
     emoji: "🔥",
-    phonetic: "/hæv ə ˈbɑːrbɪkjuː/", 
-    chinese: "去燒烤", 
+    phonetic: "/həv ə ˈbɑːbɪkjuː/", 
+    chinese: "燒烤", 
     example: "Let's have a barbecue tonight.",
     image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&q=80&w=400"
   },
-  
-  // Phonics Words - ENSURING ALL HAVE IMAGES
+
+  // --- Specific Words (User Provided) ---
   { 
-    word: "park", 
-    emoji: "🏞️",
-    phonetic: "/pɑːrk/", 
-    chinese: "公園", 
-    example: "We play in the park.",
-    image: "https://images.unsplash.com/photo-1571216521361-417c8b073289?auto=format&fit=crop&q=80&w=400"
+    word: "real", 
+    emoji: "✨",
+    phonetic: "/riːəl/", 
+    chinese: "真實的", 
+    example: "This is a real farm.",
+    image: "https://images.unsplash.com/photo-1444858291040-58f756a3bdd6?auto=format&fit=crop&q=80&w=400"
   },
   { 
-    word: "start", 
-    emoji: "🏁",
-    phonetic: "/stɑːrt/", 
-    chinese: "開始", 
-    example: "Press the button to start.",
-    image: "https://images.unsplash.com/photo-1516534775068-ba3e7458af70?auto=format&fit=crop&q=80&w=400"
+    word: "plans", 
+    emoji: "🗺️",
+    phonetic: "/plænz/", 
+    chinese: "計畫", 
+    example: "We are making plans.",
+    image: "https://images.unsplash.com/photo-1455849318743-b2233052fcff?auto=format&fit=crop&q=80&w=400"
   },
   { 
-    word: "meat", 
-    emoji: "🥩",
-    phonetic: "/miːt/", 
-    chinese: "肉", 
-    example: "I like to eat meat.",
-    image: "https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&q=80&w=400"
+    word: "outing", 
+    emoji: "🎒",
+    phonetic: "/ˈaʊtɪŋ/", 
+    chinese: "郊遊", 
+    example: "We plan an outing.",
+    image: "https://images.unsplash.com/photo-1596464716127-f9a0859b4afd?auto=format&fit=crop&q=80&w=400"
   },
   { 
-    word: "clean", 
-    emoji: "🧹",
-    phonetic: "/kliːn/", 
-    chinese: "清潔", 
-    example: "My room is clean.",
-    image: "https://images.unsplash.com/photo-1581557991964-125469da3b8a?auto=format&fit=crop&q=80&w=400"
+    word: "leave", 
+    emoji: "🚪",
+    phonetic: "/liːv/", 
+    chinese: "留下", 
+    example: "Leave your phone.",
+    image: "https://images.unsplash.com/photo-1512428559087-560fa5ce7d02?auto=format&fit=crop&q=80&w=400"
   },
   { 
-    word: "cow", 
-    emoji: "🐄",
-    phonetic: "/kaʊ/", 
-    chinese: "母牛", 
-    example: "The cow says moo.",
-    image: "https://images.unsplash.com/photo-1546445317-29f4545e9d53?auto=format&fit=crop&q=80&w=400"
+    word: "feels", 
+    emoji: "🤚",
+    phonetic: "/fiːlz/", 
+    chinese: "觸摸", 
+    example: "He feels the fur.",
+    image: "https://images.unsplash.com/photo-1517673132405-a56a62b18caf?auto=format&fit=crop&q=80&w=400"
   },
   { 
-    word: "now", 
-    emoji: "⏱️",
-    phonetic: "/naʊ/", 
-    chinese: "現在", 
-    example: "Do it now.",
-    image: "https://images.unsplash.com/photo-1501139083538-0139583c060f?auto=format&fit=crop&q=80&w=400"
+    word: "no way", 
+    emoji: "🙅‍♂️",
+    phonetic: "/nəʊ weɪ/", 
+    chinese: "決不", 
+    example: "No way!",
+    image: "https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?auto=format&fit=crop&q=80&w=400"
   },
   { 
-    word: "eat", 
-    emoji: "🍽️",
-    phonetic: "/iːt/", 
-    chinese: "吃", 
-    example: "I eat an apple.",
-    image: "https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&q=80&w=400"
+    word: "weekend", 
+    emoji: "🗓️",
+    phonetic: "/ˈwiːkend/", 
+    chinese: "週末", 
+    example: "Have a nice weekend.",
+    image: "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&q=80&w=400"
   },
   { 
-    word: "how", 
+    word: "use", 
+    emoji: "🛠️",
+    phonetic: "/juːz/", 
+    chinese: "使用", 
+    example: "Use a pen.",
+    image: "https://images.unsplash.com/photo-1584697964400-2af6a2f6204c?auto=format&fit=crop&q=80&w=400"
+  },
+  { 
+    word: "busy", 
+    emoji: "🐝",
+    phonetic: "/ˈbɪzi/", 
+    chinese: "忙碌", 
+    example: "I am busy.",
+    image: "https://images.unsplash.com/photo-1513258496098-3681207605b6?auto=format&fit=crop&q=80&w=400"
+  },
+  { 
+    word: "phone", 
+    emoji: "📱",
+    phonetic: "/fəʊn/", 
+    chinese: "電話", 
+    example: "Answer the phone.",
+    image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&q=80&w=400"
+  },
+  { 
+    word: "sunrise", 
+    emoji: "🌅",
+    phonetic: "/ˈsʌnraɪz/", 
+    chinese: "日出", 
+    example: "Look at the sunrise.",
+    image: "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&q=80&w=400"
+  },
+  { 
+    word: "sunset", 
+    emoji: "🌇",
+    phonetic: "/ˈsʌnset/", 
+    chinese: "日落", 
+    example: "The sunset is pretty.",
+    image: "https://images.unsplash.com/photo-1472120435266-53112dc2de39?auto=format&fit=crop&q=80&w=400"
+  },
+  { 
+    word: "goat", 
+    emoji: "🐐",
+    phonetic: "/ɡəʊt/", 
+    chinese: "山羊", 
+    example: "The goat has horns.",
+    image: "https://images.unsplash.com/photo-1524024973431-2ad916746881?auto=format&fit=crop&q=80&w=400"
+  },
+  { 
+    word: "boo", 
+    emoji: "👎",
+    phonetic: "/buː/", 
+    chinese: "噓!", 
+    example: "Boo!",
+    image: "https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?auto=format&fit=crop&q=80&w=400"
+  },
+  { 
+    word: "tongue", 
+    emoji: "👅",
+    phonetic: "/tʌŋ/", 
+    chinese: "舌頭", 
+    example: "My tongue is red.",
+    image: "https://images.unsplash.com/photo-1616428359216-24c5222956f1?auto=format&fit=crop&q=80&w=400"
+  },
+  { 
+    word: "boring", 
+    emoji: "🥱",
+    phonetic: "/ˈbɔːrɪŋ/", 
+    chinese: "無聊的", 
+    example: "It is boring.",
+    image: "https://images.unsplash.com/photo-1502444330042-d1a1ddf9bb5b?auto=format&fit=crop&q=80&w=400"
+  },
+  { 
+    word: "sounds", 
+    emoji: "👂",
+    phonetic: "/saʊndz/", 
+    chinese: "聽起來", 
+    example: "It sounds good.",
+    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=400"
+  },
+  { 
+    word: "triple", 
+    emoji: "3️⃣",
+    phonetic: "/ˈtrɪpəl/", 
+    chinese: "三倍的", 
+    example: "Triple means three.",
+    image: "https://images.unsplash.com/photo-1634152962476-4b8a00e1915c?auto=format&fit=crop&q=80&w=400"
+  },
+  { 
+    word: "sweet potato", 
+    emoji: "🍠",
+    phonetic: "/swiːt pəˈteɪtəʊ/", 
+    chinese: "番薯", 
+    example: "Yummy sweet potato.",
+    image: "https://images.unsplash.com/photo-1596097635121-14b63b7a0c19?auto=format&fit=crop&q=80&w=400"
+  },
+  // Helpers for interaction - Hidden items to trigger highlighting on parts of phrases
+  {
+    word: "build",
+    emoji: "🔨",
+    phonetic: "/bɪld/",
+    chinese: "建造",
+    example: "Build a house.",
+    image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&q=80&w=400",
+    hideFromList: true
+  },
+  {
+    word: "sandcastle",
+    emoji: "🏰",
+    phonetic: "/ˈsændˌkæsəl/",
+    chinese: "沙堡",
+    example: "Sandcastle.",
+    image: "https://images.unsplash.com/photo-1599597276711-2d7fd5a62f52?auto=format&fit=crop&q=80&w=400",
+    hideFromList: true
+  },
+  {
+    word: "should",
     emoji: "❓",
-    phonetic: "/haʊ/", 
-    chinese: "如何", 
-    example: "How are you?",
-    image: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&q=80&w=400"
+    phonetic: "/ʃʊd/",
+    chinese: "應該",
+    example: "You should go.",
+    image: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&q=80&w=400",
+    hideFromList: true
+  },
+  {
+    word: "swimming",
+    emoji: "🏊‍♀️",
+    phonetic: "/ˈswɪmɪŋ/",
+    chinese: "游泳",
+    example: "I like swimming.",
+    image: "https://images.unsplash.com/photo-1530549387789-4c1017266635?auto=format&fit=crop&q=80&w=400",
+    hideFromList: true
+  },
+  {
+    word: "shells",
+    emoji: "🐚",
+    phonetic: "/ʃelz/",
+    chinese: "貝殼",
+    example: "Sea shells.",
+    image: "https://images.unsplash.com/photo-1596463059283-da2572b83981?auto=format&fit=crop&q=80&w=400",
+    hideFromList: true
+  },
+  {
+    word: "own",
+    emoji: "🏠",
+    phonetic: "/əʊn/",
+    chinese: "自己的",
+    example: "My own car.",
+    image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=400",
+    hideFromList: true
+  },
+  {
+    word: "animals",
+    emoji: "🐄",
+    phonetic: "/ˈænɪməlz/",
+    chinese: "動物",
+    example: "Farm animals.",
+    image: "https://images.unsplash.com/photo-1534981146460-70803c407c57?auto=format&fit=crop&q=80&w=400",
+    hideFromList: true
+  },
+  {
+    word: "fruit",
+    emoji: "🍎",
+    phonetic: "/fruːt/",
+    chinese: "水果",
+    example: "Fresh fruit.",
+    image: "https://images.unsplash.com/photo-1619566636858-adf3ef46400b?auto=format&fit=crop&q=80&w=400",
+    hideFromList: true
+  },
+  {
+    word: "horses",
+    emoji: "🐎",
+    phonetic: "/ˈhɔːsɪz/",
+    chinese: "馬",
+    example: "Riding horses.",
+    image: "https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?auto=format&fit=crop&q=80&w=400",
+    hideFromList: true
+  },
+  {
+    word: "wet",
+    emoji: "💧",
+    phonetic: "/wet/",
+    chinese: "濕的",
+    example: "Water is wet.",
+    image: "https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&q=80&w=400",
+    hideFromList: true
+  },
+  {
+    word: "no",
+    emoji: "🙅‍♂️",
+    phonetic: "/nəʊ/",
+    chinese: "不",
+    example: "No way.",
+    image: "https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?auto=format&fit=crop&q=80&w=400",
+    hideFromList: true
+  },
+  {
+    word: "way",
+    emoji: "🙅‍♂️",
+    phonetic: "/weɪ/",
+    chinese: "方法/絕不",
+    example: "No way.",
+    image: "https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?auto=format&fit=crop&q=80&w=400",
+    hideFromList: true
   },
   { 
-    word: "brown", 
-    emoji: "🟤",
-    phonetic: "/braʊn/", 
-    chinese: "棕色", 
-    example: "The bear is brown.",
-    image: "https://images.unsplash.com/photo-1564600982-629235e13028?auto=format&fit=crop&q=80&w=400"
+    word: "sweet", 
+    emoji: "🍬",
+    phonetic: "/swiːt/", 
+    chinese: "甜的", 
+    example: "Candy is sweet.",
+    image: "https://images.unsplash.com/photo-1582058091505-f87a2e55a40f?auto=format&fit=crop&q=80&w=400",
+    hideFromList: true
+  },
+  { 
+    word: "potatoes", 
+    emoji: "🍠",
+    phonetic: "/pəˈteɪtəʊz/", 
+    chinese: "番薯", 
+    example: "Sweet potatoes.",
+    image: "https://images.unsplash.com/photo-1596097635121-14b63b7a0c19?auto=format&fit=crop&q=80&w=400",
+    hideFromList: true
+  },
+  {
+    word: "barbecue",
+    emoji: "🔥",
+    phonetic: "/ˈbɑːbɪkjuː/",
+    chinese: "燒烤",
+    example: "Have a barbecue.",
+    image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&q=80&w=400",
+    hideFromList: true
   }
 ];
 
@@ -430,7 +599,9 @@ export const WARMUP_QUESTIONS: WarmUpQuestion[] = [
   }
 ];
 
+// EXCLUDED: boo, tongue, boring, sounds, triple, sweet potato
 export const HARD_WORDS = [
+  "outdoor activities",
   "plant vegetables",
   "pick fruit",
   "feed animals",
@@ -441,5 +612,18 @@ export const HARD_WORDS = [
   "take photos",
   "have a picnic",
   "go camping",
-  "have a barbecue"
+  "have a barbecue",
+  "real",
+  "plans",
+  "outing",
+  "leave",
+  "feels",
+  "no way",
+  "weekend",
+  "use",
+  "busy",
+  "phone",
+  "sunrise",
+  "sunset",
+  "goat"
 ];
