@@ -3,75 +3,86 @@ import React from 'react';
 
 export const ValuesSection: React.FC = () => {
   return (
-    <div className="max-w-4xl mx-auto pb-40 space-y-12">
+    <div className="max-w-4xl mx-auto pb-40 space-y-12 px-4">
       
-      {/* Hero Title */}
-      <div className="text-center bg-yellow-100 rounded-[3rem] p-8 border-8 border-yellow-300 transform rotate-1 shadow-xl">
-        <h2 className="text-6xl font-black text-yellow-600 tracking-tight drop-shadow-sm mb-2">Be Smart with Tech! 💡</h2>
-        <p className="text-3xl text-yellow-700 font-bold font-['Noto_Sans_TC']">善用資訊科技</p>
+      {/* Hero Title - Friendly & Bubby */}
+      <div className="text-center relative py-6">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-40 bg-amber-100 rounded-full blur-3xl opacity-60 -z-10"></div>
+        <div className="inline-block bg-white px-10 py-5 rounded-[3rem] border-4 border-amber-200 shadow-xl transform rotate-1">
+            <h2 className="text-4xl md:text-5xl font-black text-amber-500 tracking-tight flex items-center gap-3">
+                <span>💡</span> Be Tech Smart!
+            </h2>
+            <p className="text-xl text-amber-400 font-bold font-['Noto_Sans_TC'] mt-1">做個聰明的小孩</p>
+        </div>
       </div>
 
-      {/* The Great Debate */}
-      <div className="relative">
-         <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
-             <div className="bg-red-500 text-white px-6 py-2 rounded-full text-2xl font-black shadow-lg border-4 border-white animate-pulse">VS</div>
-         </div>
-         
-         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-             {/* Virtual World */}
-             <div className="bg-gray-100 rounded-[2.5rem] p-8 border-4 border-gray-300 text-center group hover:bg-gray-200 transition-colors">
-                 <div className="text-8xl mb-4 group-hover:scale-110 transition-transform">📱</div>
-                 <h3 className="text-4xl font-black text-gray-700 mb-2">Screen World</h3>
-                 <p className="text-2xl font-bold text-gray-500 font-['Noto_Sans_TC'] mb-4">(虛擬世界)</p>
-                 <div className="bg-white rounded-2xl p-4 text-xl font-bold text-gray-600 shadow-sm border-2 border-gray-200">
-                    <span className="text-red-500">☹️ Hurts eyes</span><br/>
-                    <span className="text-gray-400 text-lg font-['Noto_Sans_TC']">(傷眼睛)</span>
-                 </div>
-             </div>
-
-             {/* Real World */}
-             <div className="bg-green-100 rounded-[2.5rem] p-8 border-4 border-green-300 text-center group hover:bg-green-200 transition-colors">
-                 <div className="text-8xl mb-4 group-hover:scale-110 transition-transform">🌿</div>
-                 <h3 className="text-4xl font-black text-green-700 mb-2">Real World</h3>
-                 <p className="text-2xl font-bold text-green-600 font-['Noto_Sans_TC'] mb-4">(真實世界)</p>
-                 <div className="bg-white rounded-2xl p-4 text-xl font-bold text-green-700 shadow-sm border-2 border-green-200">
-                    <span className="text-green-600">😃 Fresh Air & Fun</span><br/>
-                    <span className="text-green-400 text-lg font-['Noto_Sans_TC']">(新鮮空氣)</span>
-                 </div>
-             </div>
-         </div>
-      </div>
-
-      {/* Mission Card */}
-      <div className="bg-sky-50 rounded-[3rem] p-8 md:p-12 border-4 border-sky-200 shadow-xl relative overflow-hidden">
-          <div className="absolute -right-10 -top-10 bg-sky-200 w-40 h-40 rounded-full opacity-50 blur-2xl"></div>
+      {/* The Balance Scale: Two Worlds */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
           
-          <h3 className="text-4xl font-black text-sky-800 text-center mb-8 relative z-10">
-              Which one is better? 🤔
+          {/* Screen World Card */}
+          <div className="bg-white rounded-[2.5rem] p-8 border-4 border-blue-100 shadow-lg text-center flex flex-col items-center hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden group">
+              <div className="absolute -top-10 -left-10 w-32 h-32 bg-blue-50 rounded-full opacity-50"></div>
+              
+              <div className="w-24 h-24 bg-blue-50 rounded-full flex items-center justify-center text-6xl mb-4 group-hover:scale-110 transition-transform">
+                  📱
+              </div>
+              <h3 className="text-3xl font-black text-gray-700 mb-1">Screen World</h3>
+              <p className="text-lg font-bold text-gray-400 font-['Noto_Sans_TC'] mb-6">(虛擬世界)</p>
+              
+              <div className="bg-red-50 rounded-2xl p-4 w-full border border-red-100">
+                  <div className="text-4xl mb-2">😵‍💫</div>
+                  <p className="font-bold text-red-400">Tired Eyes</p>
+                  <p className="text-sm text-red-300 font-['Noto_Sans_TC']">眼睛好累</p>
+              </div>
+          </div>
+
+          {/* Real World Card */}
+          <div className="bg-white rounded-[2.5rem] p-8 border-4 border-green-100 shadow-lg text-center flex flex-col items-center hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden group">
+              <div className="absolute -top-10 -right-10 w-32 h-32 bg-green-50 rounded-full opacity-50"></div>
+              
+              <div className="w-24 h-24 bg-green-50 rounded-full flex items-center justify-center text-6xl mb-4 group-hover:scale-110 transition-transform">
+                  🌳
+              </div>
+              <h3 className="text-3xl font-black text-green-600 mb-1">Real World</h3>
+              <p className="text-lg font-bold text-green-400 font-['Noto_Sans_TC'] mb-6">(真實世界)</p>
+              
+              <div className="bg-green-50 rounded-2xl p-4 w-full border border-green-100">
+                  <div className="text-4xl mb-2">🥰</div>
+                  <p className="font-bold text-green-500">Happy & Healthy</p>
+                  <p className="text-sm text-green-300 font-['Noto_Sans_TC']">健康快樂</p>
+              </div>
+          </div>
+      </div>
+
+      {/* Smart Kid Checklist */}
+      <div className="bg-sky-50 rounded-[3rem] p-8 md:p-10 border-[6px] border-sky-200 shadow-xl relative">
+          <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-sky-400 text-white px-6 py-2 rounded-full font-black shadow-md text-lg">
+              MY PROMISE 🤙
+          </div>
+          
+          <h3 className="text-3xl font-black text-sky-800 text-center mb-8 mt-4">
+              I am a Smart Kid! 🦸
           </h3>
 
-          <div className="space-y-6 relative z-10">
-              <div className="flex items-center gap-4 bg-white p-4 rounded-2xl border-2 border-sky-100 shadow-sm">
-                  <span className="text-4xl">✅</span>
-                  <div>
-                      <p className="text-2xl font-bold text-gray-800">Talk to real people.</p>
-                      <p className="text-gray-400 font-['Noto_Sans_TC'] font-bold">與真人交談</p>
+          <div className="space-y-4">
+              {[
+                  { icon: "👀", text: "I look at real people when talking.", sub: "看著別人的眼睛說話", color: "bg-white" },
+                  { icon: "🏃", text: "I play outside with friends.", sub: "和朋友去外面玩", color: "bg-white" },
+                  { icon: "📵", text: "I put my phone away.", sub: "把手機收起來", color: "bg-white" }
+              ].map((item, idx) => (
+                  <div key={idx} className={`flex items-center gap-4 ${item.color} p-4 rounded-2xl border-2 border-sky-100 shadow-sm transition-transform hover:scale-[1.02]`}>
+                      <div className="w-12 h-12 bg-sky-100 rounded-full flex items-center justify-center text-2xl shrink-0">
+                          {item.icon}
+                      </div>
+                      <div className="flex-1">
+                          <p className="text-xl font-bold text-gray-700 leading-tight">{item.text}</p>
+                          <p className="text-gray-400 font-['Noto_Sans_TC'] font-bold text-sm">{item.sub}</p>
+                      </div>
+                      <div className="text-3xl text-sky-300">
+                          ✔
+                      </div>
                   </div>
-              </div>
-              <div className="flex items-center gap-4 bg-white p-4 rounded-2xl border-2 border-sky-100 shadow-sm">
-                  <span className="text-4xl">✅</span>
-                  <div>
-                      <p className="text-2xl font-bold text-gray-800">Play outside.</p>
-                      <p className="text-gray-400 font-['Noto_Sans_TC'] font-bold">去戶外玩</p>
-                  </div>
-              </div>
-              <div className="flex items-center gap-4 bg-white p-4 rounded-2xl border-2 border-sky-100 shadow-sm">
-                  <span className="text-4xl">❌</span>
-                  <div>
-                      <p className="text-2xl font-bold text-gray-500">Play phone all day.</p>
-                      <p className="text-gray-400 font-['Noto_Sans_TC'] font-bold">整天玩手機</p>
-                  </div>
-              </div>
+              ))}
           </div>
       </div>
 
