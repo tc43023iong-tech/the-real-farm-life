@@ -43,3 +43,9 @@ export interface WarmUpQuestion {
   chineseQuestion: string;
   answers: { text: string; icon: string }[];
 }
+
+export interface InlineQuestion {
+  question: string;
+  options: string[];
+  correctAnswer: string;
+}

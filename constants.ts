@@ -1,6 +1,73 @@
 
+import { PhonicsRule, StorySegment, VocabularyWord, WarmUpQuestion, InlineQuestion } from "./types";
 
-import { PhonicsRule, StorySegment, VocabularyWord, WarmUpQuestion } from "./types";
+export const STORY_QUESTIONS: Record<string, InlineQuestion> = {
+  "s1": {
+    question: "When is the outing? (他們星期幾出去郊遊?)",
+    options: ["Saturday", "Sunday", "Monday", "Friday"],
+    correctAnswer: "Saturday"
+  },
+  "s3": {
+    question: "What does Mum want to do? (媽媽想做什麼?)",
+    options: ["Go swimming", "Go hiking", "Watch TV", "Sleep"],
+    correctAnswer: "Go swimming"
+  },
+  "s4": {
+    question: "What does Sister want to do? (姊姊想做什麼?)",
+    options: ["Build a sandcastle", "Play football", "Eat ice cream", "Read books"],
+    correctAnswer: "Build a sandcastle"
+  },
+  "s5": {
+    question: "What does Jacky want to do? (Jacky 想做什麼?)",
+    options: ["Play Farm Life", "Go to school", "Ride a real horse", "Swim"],
+    correctAnswer: "Play Farm Life"
+  },
+  "s7": {
+    question: "Do Mum and Sister like Jacky's idea? (她們喜歡 Jacky 的想法嗎?)",
+    options: ["No", "Yes", "Maybe", "They love it"],
+    correctAnswer: "No"
+  },
+  "s8": {
+    question: "What does Dad suggest? (爸爸建議做什麼?)",
+    options: ["Go to a real farm", "Go to the cinema", "Stay home", "Go to the park"],
+    correctAnswer: "Go to a real farm"
+  },
+  "s10": {
+    question: "Does Jacky like Dad's idea? (Jacky 喜歡這個主意嗎?)",
+    options: ["No", "Yes", "He is happy", "He is excited"],
+    correctAnswer: "No"
+  },
+  "s12": {
+    question: "How does Jacky feel about the farm? (Jacky 覺得農場怎麼樣?)",
+    options: ["Boring", "Fun", "Exciting", "Scary"],
+    correctAnswer: "Boring"
+  },
+  "s14b": {
+    question: "What did they do first? (他們首先做了什麼?)",
+    options: ["Feed cows", "Eat apples", "Ride horses", "Sleep"],
+    correctAnswer: "Feed cows"
+  },
+  "s15": {
+    question: "What did they do then? How were the apples? (他們接著做了什麼？蘋果味道如何？)",
+    options: ["Picked apples, fresh and sweet", "Ate bananas, yummy", "Drank water, cold", "Fed cows, wet"],
+    correctAnswer: "Picked apples, fresh and sweet"
+  },
+  "s16a": {
+    question: "What did they do next? (他們然後做了什麼？)",
+    options: ["Ride horses", "Swim", "Run", "Drive"],
+    correctAnswer: "Ride horses"
+  },
+  "s16b": {
+    question: "What did they do finally? What did they eat? (他們最後做了什麼？吃了什麼？)",
+    options: ["BBQ (chicken wings & sweet potatoes)", "Pizza", "Burger", "Salad"],
+    correctAnswer: "BBQ (chicken wings & sweet potatoes)"
+  },
+  "s18": {
+    question: "How does Jacky feel at the end? (Jacky 最後覺得怎麼樣？)",
+    options: ["He loves the farm", "He hates it", "He is sad", "He is angry"],
+    correctAnswer: "He loves the farm"
+  }
+};
 
 export const STORY_DATA: StorySegment[] = [
   {
