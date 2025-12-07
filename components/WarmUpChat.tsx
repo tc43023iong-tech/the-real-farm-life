@@ -4,61 +4,103 @@ import { WARMUP_QUESTIONS } from '../constants';
 
 export const WarmUpChat: React.FC = () => {
   const [questionIndex, setQuestionIndex] = useState(0);
+  const [isCompleted, setIsCompleted] = useState(false);
 
   const handleQuestionAnswer = (answerText: string) => {
      if (questionIndex < WARMUP_QUESTIONS.length - 1) {
          setQuestionIndex(prev => prev + 1);
      } else {
-         // Finished, we can just stay on the last screen or show a "Done" message within the component
+         setIsCompleted(true);
      }
   };
 
   const q = WARMUP_QUESTIONS[questionIndex];
-  const isLast = questionIndex === WARMUP_QUESTIONS.length - 1;
 
-  // If user answered the last question, we can show a completion state overlay or modify the UI
-  // For simplicity, let's keep it interactive.
+  if (isCompleted) {
+      return (
+          <div className="max-w-2xl mx-auto text-center pt-10 pb-40 px-4">
+              <div className="bg-white rounded-[3rem] p-12 border-[6px] border-purple-200 shadow-xl relative overflow-hidden animate-bounce-in">
+                  <div className="absolute top-0 left-0 w-full h-6 bg-purple-100 border-b-4 border-purple-200"></div>
+                  <div className="text-9xl mb-6 animate-bounce">🌟</div>
+                  <h2 className="text-5xl font-black text-purple-600 mb-4 font-['Comic_Neue']">Awesome Job!</h2>
+                  <p className="text-2xl text-gray-500 font-bold font-['Noto_Sans_TC']">You are ready for the story!</p>
+                  <div className="mt-8">
+                     <span className="inline-block bg-purple-500 text-white px-8 py-3 rounded-full text-xl font-bold shadow-md animate-pulse">
+                        Go to "Story" tab! 📖
+                     </span>
+                  </div>
+              </div>
+          </div>
+      )
+  }
 
   return (
-    <div className="max-w-3xl mx-auto space-y-8 text-center pb-32">
-         <div className="bg-purple-100 p-6 rounded-3xl border-4 border-purple-300 transform rotate-1">
-            <h2 className="text-3xl font-black text-purple-600 mb-2">Let's Chat! <span className="text-2xl font-['Noto_Sans_TC']">(聊一聊)</span> 💬</h2>
-            <div className="inline-block bg-white px-4 py-1 rounded-full text-purple-800 font-bold shadow-sm">
-                Question {questionIndex + 1}
-            </div>
-         </div>
+    <div className="max-w-3xl mx-auto pb-48 px-4">
+      
+      {/* Header Badge */}
+      <div className="text-center mb-12 relative">
+          <div className="inline-block bg-purple-500 text-white px-10 py-4 rounded-full border-[5px] border-purple-300 shadow-[0_8px_0_0_rgba(168,85,247,0.4)] transform -rotate-2 z-10 relative transition-transform hover:rotate-0 hover:scale-105">
+              <h2 className="text-4xl font-black flex items-center gap-3">
+                 <span>💬</span> Chat Time <span className="text-xl opacity-90 font-['Noto_Sans_TC'] bg-white/20 px-3 py-1 rounded-lg">(聊一聊)</span>
+              </h2>
+          </div>
+          {/* Progress pill */}
+          <div className="mt-6">
+             <span className="bg-white text-purple-600 px-6 py-2 rounded-full text-lg font-black border-4 border-purple-100 shadow-sm">
+                Question {questionIndex + 1} / {WARMUP_QUESTIONS.length}
+             </span>
+          </div>
+      </div>
 
-         <div className="flex gap-4 items-start text-left">
-             <div className="text-6xl bg-white rounded-full p-2 border-4 border-gray-200 shadow-lg z-10 shrink-0">🐮</div>
-             <div className="bg-white p-8 rounded-[2rem] rounded-tl-none shadow-xl border-4 border-gray-100 flex-1 relative">
-                 <p className="text-4xl font-bold text-gray-800 mb-3 font-['Comic_Neue']">{q.question}</p>
-                 <p className="text-2xl text-gray-500 font-bold font-['Noto_Sans_TC']">{q.chineseQuestion}</p>
-                 {/* Decorative speech triangle */}
-                 <div className="absolute top-8 -left-3 w-6 h-6 bg-white border-l-4 border-b-4 border-gray-100 transform rotate-45"></div>
-             </div>
-         </div>
+      {/* Chat Area */}
+      <div className="flex flex-col gap-10">
+          
+          {/* Cow's Turn */}
+          <div className="flex gap-4 md:gap-6 items-end group">
+               {/* Avatar */}
+               <div className="w-24 h-24 md:w-28 md:h-28 bg-white rounded-full border-[6px] border-purple-200 flex items-center justify-center text-5xl md:text-6xl shadow-lg shrink-0 relative z-10 group-hover:scale-110 transition-transform">
+                   🐮
+                   <div className="absolute -bottom-2 -right-2 bg-purple-500 text-white text-xs md:text-sm font-bold px-3 py-1 rounded-full border-4 border-white shadow-sm">Teacher</div>
+               </div>
+               
+               {/* Bubble */}
+               <div className="bg-white p-8 rounded-[2.5rem] rounded-bl-none border-[5px] border-purple-100 shadow-[0_10px_20px_-5px_rgba(0,0,0,0.1)] relative w-full transform origin-bottom-left animate-pop-in">
+                   <p className="text-3xl md:text-4xl font-black text-gray-800 mb-3 font-['Comic_Neue'] leading-snug">
+                       {q.question}
+                   </p>
+                   <div className="inline-block bg-purple-50 px-4 py-2 rounded-xl">
+                       <p className="text-xl text-purple-500 font-bold font-['Noto_Sans_TC']">
+                           {q.chineseQuestion}
+                       </p>
+                   </div>
+               </div>
+          </div>
 
-         {/* Compact layout for answers */}
-         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
-             {q.answers.map((ans, idx) => (
-                 <button
-                    key={idx}
-                    onClick={() => handleQuestionAnswer(ans.text)}
-                    className="flex items-center gap-4 bg-white px-6 py-4 rounded-2xl border-4 border-purple-50 hover:border-purple-300 hover:bg-purple-50 transition-all shadow-md group text-left hover:-translate-y-1"
-                 >
-                     <span className="text-4xl group-hover:scale-125 transition-transform bg-gray-50 rounded-full w-12 h-12 flex items-center justify-center">{ans.icon}</span>
-                     <span className="text-xl font-bold text-gray-700">{ans.text}</span>
-                 </button>
-             ))}
-         </div>
-         
-         {/* Simple completion message at the bottom if on last question */}
-         {isLast && (
-             <div className="mt-12 p-8 bg-green-100 rounded-[3rem] animate-bounce border-8 border-green-200 shadow-xl">
-                 <p className="text-4xl font-black text-green-700 mb-2">Great job! 🌟</p>
-                 <p className="text-xl text-green-800 font-bold">You are ready for the story!</p>
-             </div>
-         )}
+          {/* User's Turn (Answers) */}
+          <div className="pl-0 md:pl-32">
+              <p className="text-gray-400 font-bold ml-4 mb-4 text-sm uppercase tracking-widest">Your Turn</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {q.answers.map((ans, idx) => (
+                      <button
+                          key={idx}
+                          onClick={() => handleQuestionAnswer(ans.text)}
+                          className="bg-white p-4 rounded-[2rem] border-[4px] border-purple-50 shadow-md hover:border-purple-300 hover:bg-purple-50 hover:shadow-[0_8px_0_0_rgba(216,180,254,1)] hover:-translate-y-1 active:shadow-none active:translate-y-1 active:border-purple-400 transition-all group text-left flex items-center gap-4 relative overflow-hidden"
+                      >
+                          {/* Circle backing for emoji */}
+                          <div className="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center text-3xl group-hover:scale-110 group-hover:rotate-6 transition-transform shrink-0 border-2 border-purple-200">
+                              {ans.icon}
+                          </div>
+                          
+                          <span className="text-xl font-bold text-gray-700 font-['Comic_Neue'] relative z-10 leading-tight">
+                              {ans.text}
+                          </span>
+                      </button>
+                  ))}
+              </div>
+          </div>
+
+      </div>
+
     </div>
   );
 };
