@@ -41,7 +41,7 @@ export const WarmUpChat: React.FC = () => {
       <div className="text-center mb-12 relative">
           <div className="inline-block bg-purple-500 text-white px-10 py-4 rounded-full border-[5px] border-purple-300 shadow-[0_8px_0_0_rgba(168,85,247,0.4)] transform -rotate-2 z-10 relative transition-transform hover:rotate-0 hover:scale-105">
               <h2 className="text-4xl font-black flex items-center gap-3">
-                 <span>💬</span> Chat Time <span className="text-xl opacity-90 font-['Noto_Sans_TC'] bg-white/20 px-3 py-1 rounded-lg">(聊一聊)</span>
+                 <span>💬</span> Chat Time
               </h2>
           </div>
           {/* Progress pill */}
@@ -64,34 +64,29 @@ export const WarmUpChat: React.FC = () => {
                </div>
                
                {/* Bubble */}
-               <div className="bg-white p-8 rounded-[2.5rem] rounded-bl-none border-[5px] border-purple-100 shadow-[0_10px_20px_-5px_rgba(0,0,0,0.1)] relative w-full transform origin-bottom-left animate-pop-in">
-                   <p className="text-3xl md:text-4xl font-black text-gray-800 mb-3 font-['Comic_Neue'] leading-snug">
+               <div className="bg-white p-8 rounded-[2.5rem] rounded-bl-none border-[5px] border-purple-100 shadow-[0_10px_20px_-5px_rgba(0,0,0,0.1)] relative w-full transform origin-bottom-left animate-pop-in flex items-center">
+                   <p className="text-3xl md:text-4xl font-black text-gray-800 font-['Comic_Neue'] leading-snug">
                        {q.question}
                    </p>
-                   <div className="inline-block bg-purple-50 px-4 py-2 rounded-xl">
-                       <p className="text-xl text-purple-500 font-bold font-['Noto_Sans_TC']">
-                           {q.chineseQuestion}
-                       </p>
-                   </div>
                </div>
           </div>
 
           {/* User's Turn (Answers) */}
-          <div className="pl-0 md:pl-32">
-              <p className="text-gray-400 font-bold ml-4 mb-4 text-sm uppercase tracking-widest">Your Turn</p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="w-full">
+              <p className="text-gray-400 font-bold mb-4 text-sm uppercase tracking-widest">Your Turn</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                   {q.answers.map((ans, idx) => (
                       <button
                           key={idx}
                           onClick={() => handleQuestionAnswer(ans.text)}
-                          className="bg-white p-4 rounded-[2rem] border-[4px] border-purple-50 shadow-md hover:border-purple-300 hover:bg-purple-50 hover:shadow-[0_8px_0_0_rgba(216,180,254,1)] hover:-translate-y-1 active:shadow-none active:translate-y-1 active:border-purple-400 transition-all group text-left flex items-center gap-4 relative overflow-hidden"
+                          className="bg-white p-3 rounded-[2rem] border-[4px] border-purple-50 shadow-md hover:border-purple-300 hover:bg-purple-50 hover:shadow-[0_8px_0_0_rgba(216,180,254,1)] hover:-translate-y-1 active:shadow-none active:translate-y-1 active:border-purple-400 transition-all group text-left flex items-center gap-3 relative overflow-hidden"
                       >
                           {/* Circle backing for emoji */}
-                          <div className="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center text-3xl group-hover:scale-110 group-hover:rotate-6 transition-transform shrink-0 border-2 border-purple-200">
+                          <div className="w-12 h-12 bg-purple-100 rounded-2xl flex items-center justify-center text-2xl group-hover:scale-110 group-hover:rotate-6 transition-transform shrink-0 border-2 border-purple-200">
                               {ans.icon}
                           </div>
                           
-                          <span className="text-xl font-bold text-gray-700 font-['Comic_Neue'] relative z-10 leading-tight">
+                          <span className="text-lg font-bold text-gray-700 font-['Comic_Neue'] relative z-10 leading-tight">
                               {ans.text}
                           </span>
                       </button>

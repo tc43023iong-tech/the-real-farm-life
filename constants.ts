@@ -181,7 +181,7 @@ export const STORY_DATA: StorySegment[] = [
   {
     id: "s14a",
     type: "narrative",
-    text: "At the farm, the family go on a tour.",
+    text: "At the farm, the family go on a tour (參觀).",
     chinese: "在農場，家人進行參觀。"
   },
   {
@@ -193,7 +193,7 @@ export const STORY_DATA: StorySegment[] = [
   {
     id: "s15",
     type: "narrative",
-    text: "Then, they pick and eat apples 🍎.|The apples are fresh ✨ and sweet.",
+    text: "Then, they pick and eat apples 🍎.|The apples are fresh (新鮮) ✨ and sweet.",
     chinese: "然後，他們摘蘋果吃。|蘋果又新鮮又甜。"
   },
   {
@@ -561,57 +561,39 @@ export const VOCABULARY_DATA: VocabularyWord[] = [
     hideFromList: true
   },
   {
-    word: "wet",
-    emoji: "💧",
-    phonetic: "/wet/",
-    chinese: "濕的",
-    example: "Water is wet.",
-    image: "https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&q=80&w=400",
+    word: "look",
+    emoji: "👀",
+    phonetic: "/lʊk/",
+    chinese: "看",
+    example: "Look at this.",
+    image: "https://images.unsplash.com/photo-1627645835237-0743e52b991f?auto=format&fit=crop&q=80&w=400",
     hideFromList: true
   },
   {
-    word: "no",
-    emoji: "🙅‍♂️",
-    phonetic: "/nəʊ/",
-    chinese: "不",
-    example: "No way.",
-    image: "https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?auto=format&fit=crop&q=80&w=400",
+    word: "go",
+    emoji: "🚶",
+    phonetic: "/ɡəʊ/",
+    chinese: "去",
+    example: "Go out.",
+    image: "https://images.unsplash.com/photo-1455849318743-b2233052fcff?auto=format&fit=crop&q=80&w=400",
     hideFromList: true
   },
   {
-    word: "way",
-    emoji: "🙅‍♂️",
-    phonetic: "/weɪ/",
-    chinese: "方法/絕不",
-    example: "No way.",
-    image: "https://images.unsplash.com/photo-1525785967371-87ba44b3e6cf?auto=format&fit=crop&q=80&w=400",
-    hideFromList: true
-  },
-  { 
-    word: "sweet", 
-    emoji: "🍬",
-    phonetic: "/swiːt/", 
-    chinese: "甜的", 
-    example: "Candy is sweet.",
-    image: "https://images.unsplash.com/photo-1582058091505-f87a2e55a40f?auto=format&fit=crop&q=80&w=400",
-    hideFromList: true
-  },
-  { 
-    word: "potatoes", 
-    emoji: "🍠",
-    phonetic: "/pəˈteɪtəʊz/", 
-    chinese: "番薯", 
-    example: "Sweet potatoes.",
-    image: "https://images.unsplash.com/photo-1596097635121-14b63b7a0c19?auto=format&fit=crop&q=80&w=400",
+    word: "fresh",
+    emoji: "✨",
+    phonetic: "/freʃ/",
+    chinese: "新鮮",
+    example: "Fresh fruit.",
+    image: "https://images.unsplash.com/photo-1595475207225-428b62bda831?auto=format&fit=crop&q=80&w=400",
     hideFromList: true
   },
   {
-    word: "barbecue",
-    emoji: "🔥",
-    phonetic: "/ˈbɑːbɪkjuː/",
-    chinese: "燒烤",
-    example: "Have a barbecue.",
-    image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&q=80&w=400",
+    word: "go on a tour",
+    emoji: "🚜",
+    phonetic: "/ɡəʊ ɒn ə tʊər/",
+    chinese: "去參觀",
+    example: "We go on a tour.",
+    image: "https://images.unsplash.com/photo-1533552084795-305716e91f6e?auto=format&fit=crop&q=80&w=400",
     hideFromList: true
   }
 ];
@@ -648,7 +630,12 @@ export const WARMUP_QUESTIONS: WarmUpQuestion[] = [
       { text: "I like reading books.", icon: "📚" },
       { text: "I like watching TV.", icon: "📺" },
       { text: "I like drawing.", icon: "🎨" },
-      { text: "I like cooking.", icon: "🍳" }
+      { text: "I like cooking.", icon: "🍳" },
+      { text: "I like music.", icon: "🎵" },
+      { text: "I like dancing.", icon: "💃" },
+      { text: "I like sleeping.", icon: "😴" },
+      { text: "I like swimming.", icon: "🏊" },
+      { text: "I like hiking.", icon: "🥾" }
     ]
   },
   {
@@ -661,7 +648,12 @@ export const WARMUP_QUESTIONS: WarmUpQuestion[] = [
       { text: "I want to go!", icon: "🤩" },
       { text: "I saw a cow there!", icon: "🐄" },
       { text: "It was smelly!", icon: "🤢" },
-      { text: "I picked strawberries!", icon: "🍓" }
+      { text: "I picked strawberries!", icon: "🍓" },
+      { text: "I rode a horse!", icon: "🐎" },
+      { text: "I fed the sheep.", icon: "🐑" },
+      { text: "I ate ice cream.", icon: "🍦" },
+      { text: "I scared of bugs.", icon: "🐛" },
+      { text: "It was too hot.", icon: "☀️" }
     ]
   }
 ];

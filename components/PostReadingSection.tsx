@@ -1,6 +1,65 @@
 
 import React, { useState } from 'react';
 
+// Reusable Components for Consistency (Moved outside to fix type and performance issues)
+
+interface ChoiceButtonProps {
+    label: string;
+    isSelected: boolean;
+    isCorrect: boolean;
+    onClick: () => void;
+}
+
+const ChoiceButton: React.FC<ChoiceButtonProps> = ({ label, isSelected, isCorrect, onClick }) => {
+    let baseClass = "px-4 py-2 rounded-xl border-[3px] font-bold text-lg md:text-xl transition-all transform hover:-translate-y-0.5 active:translate-y-0 shadow-sm";
+    let stateClass = "bg-white border-slate-200 text-slate-600 hover:bg-slate-50 hover:border-slate-300"; // Default
+
+    if (isSelected) {
+        if (isCorrect) {
+            stateClass = "bg-green-100 border-green-400 text-green-700 shadow-md"; 
+        } else {
+            stateClass = "bg-red-50 border-red-300 text-red-700 opacity-90";
+        }
+    }
+
+    return (
+        <button onClick={onClick} className={`${baseClass} ${stateClass}`}>
+            {label}
+        </button>
+    );
+};
+
+interface QuestionCardProps {
+    number: string | number;
+    children: React.ReactNode;
+}
+
+const QuestionCard: React.FC<QuestionCardProps> = ({ number, children }) => (
+    <div className="bg-white rounded-[2rem] shadow-sm border-[4px] border-slate-100 overflow-hidden relative hover:border-slate-200 transition-colors group">
+        <div className="absolute top-0 left-0 bg-slate-100 text-slate-500 px-5 py-2 rounded-br-2xl font-black text-xl border-b-[3px] border-r-[3px] border-slate-200 z-10 group-hover:bg-slate-200 group-hover:text-slate-600 transition-colors">
+            {number}
+        </div>
+        <div className="p-6 md:p-8 pt-16 md:pt-14">
+            {children}
+        </div>
+    </div>
+);
+
+interface SectionHeaderProps {
+    icon: string;
+    title: string;
+    colorClass: string;
+}
+
+const SectionHeader: React.FC<SectionHeaderProps> = ({ icon, title, colorClass }) => (
+    <div className="flex items-center gap-4 mb-6 mt-12 first:mt-0">
+        <div className={`w-14 h-14 ${colorClass} rounded-2xl flex items-center justify-center text-white text-2xl font-black shadow-md transform -rotate-3`}>
+            {icon}
+        </div>
+        <h3 className="text-3xl md:text-4xl font-black text-slate-700 tracking-tight">{title}</h3>
+    </div>
+);
+
 export const PostReadingSection: React.FC = () => {
   const [orderAnswers, setOrderAnswers] = useState<{[key: string]: string}>({});
   const [fillAnswers, setFillAnswers] = useState<{[key: string]: string}>({});
@@ -44,236 +103,237 @@ export const PostReadingSection: React.FC = () => {
       q4b: ["grass", "apples & BBQ", "books"]
   };
 
-  const ChoiceGroup = ({ qId, options, selected, onSelect }: { qId: string, options: string[], selected: string | undefined, onSelect: (v: string) => void }) => {
-    const correct = CORRECT_FILL[qId as keyof typeof CORRECT_FILL];
-    
-    return (
-        <div className="inline-flex flex-wrap gap-2 mx-1 align-middle my-1">
-            {options.map((opt) => {
-                const isSelected = selected === opt;
-                let btnClass = "bg-white border-teal-100 text-teal-800 hover:bg-teal-50"; // Default
-                
-                if (isSelected) {
-                    if (opt === correct) {
-                        // Lighter green used here
-                        btnClass = "bg-green-300 border-green-300 text-white shadow-sm scale-105"; // Correct
-                    } else {
-                        btnClass = "bg-red-400 border-red-500 text-white shadow-sm"; // Incorrect
-                    }
-                }
-
-                return (
-                    <button
-                        key={opt}
-                        onClick={() => onSelect(opt)}
-                        className={`px-3 py-2 rounded-xl border-[3px] font-bold text-xl transition-all transform ${btnClass}`}
-                    >
-                        {opt}
-                    </button>
-                );
-            })}
-        </div>
-    );
-  };
-
-  const CircleChoice = ({ qId, val, label }: { qId: string, val: string, label: string }) => {
-      const selected = choiceAnswers[qId];
-      const correct = CORRECT_CHOICE[qId as keyof typeof CORRECT_CHOICE];
-      
-      let btnClass = "border-gray-200 bg-white text-gray-500";
-      if (selected === val) {
-          if (val === correct) {
-              // Lighter green
-              btnClass = "bg-green-50 border-green-300 text-green-500 scale-105";
-          } else {
-              btnClass = "bg-red-100 border-red-300 text-red-900";
-          }
-      }
-
-      return (
-        <button onClick={() => toggleChoice(qId, val)} className={`px-4 py-2 rounded-xl border-[3px] text-2xl transition-all ${btnClass} font-bold`}>
-            {label}
-        </button>
-      );
-  };
-
   return (
-    <div className="max-w-5xl mx-auto pb-48 space-y-6">
+    <div className="max-w-4xl mx-auto pb-48 px-4 space-y-8">
       
       {/* Page Instruction */}
-      <div className="text-center mb-2">
-         <p className="text-3xl md:text-4xl font-black text-orange-500 bg-orange-50 inline-block px-8 py-3 rounded-full border-4 border-orange-200 shadow-sm animate-bounce">
-           Turn your book to page 51! 📖
-         </p>
-      </div>
-
-      <div className="text-center bg-teal-100 p-6 rounded-[2.5rem] border-[6px] border-teal-300 transform -rotate-1 shadow-lg relative overflow-hidden">
-        <span className="absolute top-4 right-8 text-5xl opacity-50">📝</span>
-        <span className="absolute bottom-4 left-8 text-5xl opacity-50">✅</span>
-        <h2 className="text-5xl font-black text-teal-800 tracking-tight mb-2">Post-reading Challenge 🏆</h2>
-        <p className="text-2xl text-teal-700 font-bold">Check what you learned! (閱讀理解)</p>
-      </div>
-
-      {/* Part 1: Ordering */}
-      <div className="bg-white rounded-[2rem] p-5 shadow-lg border-4 border-teal-50 relative">
-         <div className="absolute -top-6 -left-2 bg-teal-500 text-white w-14 h-14 rounded-full flex items-center justify-center text-3xl font-bold shadow-md border-[3px] border-white">
-             1
+      <div className="text-center mb-12 space-y-4">
+         <div className="inline-block bg-orange-100 text-orange-600 px-8 py-2 rounded-full font-bold border-2 border-orange-200 animate-bounce">
+           Turn to page 51 📖
          </div>
-         <h3 className="text-3xl md:text-4xl font-bold text-gray-700 ml-12 mb-4 border-b-2 border-teal-100 pb-2">Put the events in order (1–5) 🔢</h3>
-        
-        <div className="space-y-2 pl-0 md:pl-2">
-            {[
+         <h2 className="text-5xl font-black text-slate-800 tracking-tight drop-shadow-sm">
+            Quiz Time! <span className="text-4xl align-middle">✍️</span>
+         </h2>
+         <p className="text-xl text-slate-400 font-bold font-['Noto_Sans_TC']">Check your understanding</p>
+      </div>
+
+      {/* Part A: Ordering */}
+      <section>
+          <SectionHeader icon="A" title="Order the Events (1-5)" colorClass="bg-teal-400" />
+          
+          <div className="bg-white rounded-[2.5rem] p-6 md:p-10 border-[6px] border-teal-100 shadow-xl space-y-4 relative overflow-hidden">
+              {/* Decorative Number Bg */}
+              <div className="absolute -right-10 -bottom-10 text-9xl font-black text-teal-50 opacity-50 pointer-events-none select-none">123</div>
+
+              {[
                 { id: "A", text: "The family go on a tour of a farm. 🚜" },
                 { id: "B", text: "Jacky tells his family about Farm Life. 🎮" },
                 { id: "C", text: "Mum says she wants to go to the beach. 🏖️" },
                 { id: "D", text: "Dad tells Jacky to leave his phone at home. 📱" },
                 { id: "E", text: "Jacky and his family have a barbecue. 🍖" }
-            ].map((item) => {
+              ].map((item) => {
                 const userVal = orderAnswers[item.id] || '';
                 const correctVal = CORRECT_ORDER[item.id as keyof typeof CORRECT_ORDER];
-                let borderClass = "border-gray-300 focus:border-teal-400";
-                let bgClass = "bg-white text-teal-600";
                 
+                let inputStyle = "bg-slate-50 border-slate-200 text-slate-400 focus:border-teal-400 focus:bg-white";
                 if (userVal) {
                     if (userVal === correctVal) {
-                        // Lighter green
-                        borderClass = "border-green-300 bg-green-50 text-green-500";
-                        bgClass = "bg-green-50";
+                        inputStyle = "bg-green-50 border-green-300 text-green-600 font-black";
                     } else {
-                        borderClass = "border-red-400 bg-red-50 text-red-700";
-                        bgClass = "bg-red-50";
+                        inputStyle = "bg-red-50 border-red-200 text-red-500 font-black";
                     }
                 }
 
                 return (
-                    <div key={item.id} className="flex items-center gap-3 bg-gray-50 p-2 rounded-xl">
-                        <input 
-                            type="number" 
-                            min="1" 
-                            max="5"
-                            placeholder="?"
-                            className={`w-14 h-14 text-center text-3xl font-bold border-[3px] rounded-xl focus:outline-none shadow-sm transition-colors ${borderClass} ${bgClass}`}
-                            value={userVal}
-                            onChange={(e) => setOrderAnswers({...orderAnswers, [item.id]: e.target.value})}
-                        />
-                        <p className="text-2xl md:text-3xl font-medium text-gray-700 leading-snug">{item.text}</p>
+                    <div key={item.id} className="flex items-center gap-4 group">
+                        <div className="relative shrink-0">
+                            <input 
+                                type="number" 
+                                min="1" 
+                                max="5"
+                                placeholder="-"
+                                className={`w-16 h-16 text-center text-3xl rounded-2xl border-[4px] shadow-sm outline-none transition-all ${inputStyle}`}
+                                value={userVal}
+                                onChange={(e) => setOrderAnswers({...orderAnswers, [item.id]: e.target.value})}
+                            />
+                        </div>
+                        <p className="text-xl md:text-2xl font-bold text-slate-600 group-hover:text-slate-800 transition-colors leading-snug">
+                            {item.text}
+                        </p>
                     </div>
                 );
-            })}
-        </div>
-      </div>
+              })}
+          </div>
+      </section>
 
-      {/* Part 2: Q&A - Select Options */}
-      <div className="bg-white rounded-[2rem] p-6 shadow-lg border-4 border-teal-50 relative">
-        <h3 className="text-3xl md:text-4xl font-bold text-gray-700 mb-6 border-b-2 border-teal-100 pb-2 text-center">Choose the right words 🤔</h3>
-
-        <div className="space-y-4">
+      {/* Part B: Questions */}
+      <section>
+         <SectionHeader icon="B" title="Questions & Answers" colorClass="bg-indigo-400" />
+         
+         <div className="grid grid-cols-1 gap-6">
+            
             {/* Q2 */}
-            <div className="space-y-2 p-5 bg-amber-50 rounded-[2rem] border-[3px] border-amber-100 relative">
-                <div className="absolute -top-4 -left-2 bg-amber-400 text-white w-12 h-12 rounded-full flex items-center justify-center text-2xl font-bold shadow-sm">2.</div>
-                <p className="text-3xl font-bold text-amber-800 pl-8 mb-2">Why does Jacky want to stay home? 🏠</p>
-                <div className="text-3xl leading-snug font-medium text-gray-700">
-                    <span className="inline-block mr-2">He wants</span>
-                    <ChoiceGroup 
-                        qId="q2a"
-                        options={options.q2a} 
-                        selected={fillAnswers['q2a']} 
-                        onSelect={(v) => handleFillSelect('q2a', v)} 
-                    />
-                    <span className="inline-block mx-2">because</span>
-                    <ChoiceGroup 
-                        qId="q2b"
-                        options={options.q2b} 
-                        selected={fillAnswers['q2b']} 
-                        onSelect={(v) => handleFillSelect('q2b', v)} 
-                    />
-                    <span className="inline-block mx-2">.</span>
+            <QuestionCard number="2">
+                <p className="text-2xl font-black text-slate-700 mb-6">Why does Jacky want to stay home? 🏠</p>
+                <div className="text-xl md:text-2xl font-bold text-slate-500 leading-loose">
+                    <span className="inline-block mr-2 text-slate-400">He wants</span>
+                    <div className="inline-flex flex-wrap gap-2 align-middle">
+                        {options.q2a.map(opt => (
+                            <ChoiceButton 
+                                key={opt} 
+                                label={opt} 
+                                isSelected={fillAnswers['q2a'] === opt} 
+                                isCorrect={CORRECT_FILL['q2a'] === opt}
+                                onClick={() => handleFillSelect('q2a', opt)} 
+                            />
+                        ))}
+                    </div>
+                    <span className="inline-block mx-2 text-slate-400">because</span>
+                    <div className="inline-flex flex-wrap gap-2 align-middle">
+                        {options.q2b.map(opt => (
+                            <ChoiceButton 
+                                key={opt} 
+                                label={opt} 
+                                isSelected={fillAnswers['q2b'] === opt} 
+                                isCorrect={CORRECT_FILL['q2b'] === opt}
+                                onClick={() => handleFillSelect('q2b', opt)} 
+                            />
+                        ))}
+                    </div>
+                    <span className="text-slate-400">.</span>
                 </div>
-            </div>
+            </QuestionCard>
 
             {/* Q3 */}
-            <div className="space-y-2 p-5 bg-sky-50 rounded-[2rem] border-[3px] border-sky-100 relative">
-                <div className="absolute -top-4 -left-2 bg-sky-400 text-white w-12 h-12 rounded-full flex items-center justify-center text-2xl font-bold shadow-sm">3.</div>
-                <p className="text-3xl font-bold text-sky-800 pl-8 mb-2">When does Jacky visit the farm? 📅</p>
-                <div className="text-3xl leading-snug font-medium text-gray-700">
-                    <span className="inline-block mr-2">He</span>
-                    <ChoiceGroup 
-                        qId="q3"
-                        options={options.q3} 
-                        selected={fillAnswers['q3']} 
-                        onSelect={(v) => handleFillSelect('q3', v)} 
-                    />
-                    <span className="inline-block mx-2">.</span>
+            <QuestionCard number="3">
+                <p className="text-2xl font-black text-slate-700 mb-6">When does Jacky visit the farm? 📅</p>
+                <div className="text-xl md:text-2xl font-bold text-slate-500 leading-loose">
+                    <span className="inline-block mr-2 text-slate-400">He</span>
+                    <div className="inline-flex flex-wrap gap-2 align-middle">
+                        {options.q3.map(opt => (
+                            <ChoiceButton 
+                                key={opt} 
+                                label={opt} 
+                                isSelected={fillAnswers['q3'] === opt} 
+                                isCorrect={CORRECT_FILL['q3'] === opt}
+                                onClick={() => handleFillSelect('q3', opt)} 
+                            />
+                        ))}
+                    </div>
+                    <span className="text-slate-400">.</span>
                 </div>
-            </div>
+            </QuestionCard>
 
-             {/* Q4 */}
-             <div className="space-y-2 p-5 bg-red-50 rounded-[2rem] border-[3px] border-red-100 relative">
-                <div className="absolute -top-4 -left-2 bg-red-400 text-white w-12 h-12 rounded-full flex items-center justify-center text-2xl font-bold shadow-sm">4.</div>
-                <p className="text-3xl font-bold text-red-800 pl-8 mb-2">What does Jacky eat on the farm? 🍎</p>
-                <div className="text-3xl leading-snug font-medium text-gray-700">
-                    <span className="inline-block mr-2">He</span>
-                     <ChoiceGroup 
-                        qId="q4a"
-                        options={options.q4a} 
-                        selected={fillAnswers['q4a']} 
-                        onSelect={(v) => handleFillSelect('q4a', v)} 
-                    />
-                    <span className="inline-block mx-2">some</span>
-                    <ChoiceGroup 
-                        qId="q4b"
-                        options={options.q4b} 
-                        selected={fillAnswers['q4b']} 
-                        onSelect={(v) => handleFillSelect('q4b', v)} 
-                    />
-                    <span className="inline-block mx-2">.</span>
+            {/* Q4 */}
+            <QuestionCard number="4">
+                <p className="text-2xl font-black text-slate-700 mb-6">What does Jacky eat on the farm? 🍎</p>
+                <div className="text-xl md:text-2xl font-bold text-slate-500 leading-loose">
+                    <span className="inline-block mr-2 text-slate-400">He</span>
+                    <div className="inline-flex flex-wrap gap-2 align-middle">
+                        {options.q4a.map(opt => (
+                            <ChoiceButton 
+                                key={opt} 
+                                label={opt} 
+                                isSelected={fillAnswers['q4a'] === opt} 
+                                isCorrect={CORRECT_FILL['q4a'] === opt}
+                                onClick={() => handleFillSelect('q4a', opt)} 
+                            />
+                        ))}
+                    </div>
+                    <span className="inline-block mx-2 text-slate-400">some</span>
+                    <div className="inline-flex flex-wrap gap-2 align-middle">
+                        {options.q4b.map(opt => (
+                            <ChoiceButton 
+                                key={opt} 
+                                label={opt} 
+                                isSelected={fillAnswers['q4b'] === opt} 
+                                isCorrect={CORRECT_FILL['q4b'] === opt}
+                                onClick={() => handleFillSelect('q4b', opt)} 
+                            />
+                        ))}
+                    </div>
+                    <span className="text-slate-400">.</span>
                 </div>
-            </div>
-        </div>
-      </div>
+            </QuestionCard>
 
-      {/* Part 3: Multiple Choice */}
-      <div className="bg-white rounded-[2rem] p-6 shadow-lg border-4 border-teal-50">
-        <h3 className="text-3xl md:text-4xl font-bold text-gray-700 mb-6 border-b-2 border-teal-100 pb-2 text-center">Circle the best words ⭕</h3>
-
-        <div className="space-y-4 text-4xl font-medium leading-snug">
             {/* Q5 */}
-            <div className="flex flex-wrap items-center gap-3 p-4 rounded-2xl hover:bg-gray-50 transition-colors">
-                <span className="font-black text-white bg-teal-400 w-12 h-12 rounded-full flex items-center justify-center text-xl shadow-sm shrink-0">5.</span>
-                <span>It is</span>
-                <CircleChoice qId="q5" val="Dad" label="Dad’s" />
-                <span className="font-bold text-gray-400">/</span>
-                <CircleChoice qId="q5" val="Mum" label="Mum’s" />
-                <span>idea to visit a real farm. 💡</span>
-            </div>
+            <QuestionCard number="5">
+                <p className="text-2xl font-black text-slate-700 mb-6">Whose idea is it? 💡</p>
+                <div className="text-xl md:text-2xl font-bold text-slate-500 leading-loose flex flex-wrap items-center gap-2">
+                    <span>It is</span>
+                    <ChoiceButton 
+                        label="Dad's" 
+                        isSelected={choiceAnswers['q5'] === 'Dad'} 
+                        isCorrect={CORRECT_CHOICE['q5'] === 'Dad'} 
+                        onClick={() => toggleChoice('q5', 'Dad')} 
+                    />
+                    <span className="text-slate-300">/</span>
+                    <ChoiceButton 
+                        label="Mum's" 
+                        isSelected={choiceAnswers['q5'] === 'Mum'} 
+                        isCorrect={CORRECT_CHOICE['q5'] === 'Mum'} 
+                        onClick={() => toggleChoice('q5', 'Mum')} 
+                    />
+                    <span>idea to visit a real farm.</span>
+                </div>
+            </QuestionCard>
 
-             {/* Q6 */}
-             <div className="flex flex-wrap items-center gap-3 p-4 rounded-2xl hover:bg-gray-50 transition-colors">
-                <span className="font-black text-white bg-teal-400 w-12 h-12 rounded-full flex items-center justify-center text-xl shadow-sm shrink-0">6.</span>
-                <span>At the start,</span>
-                <CircleChoice qId="q6" val="Jacky" label="Jacky" />
-                <span className="font-bold text-gray-400">/</span>
-                <CircleChoice qId="q6" val="Mum" label="Mum" />
-                <span>doesn’t want to go. 🙅</span>
-            </div>
+            {/* Q6 */}
+            <QuestionCard number="6">
+                <p className="text-2xl font-black text-slate-700 mb-6">Who doesn't want to go? 🙅</p>
+                <div className="text-xl md:text-2xl font-bold text-slate-500 leading-loose flex flex-wrap items-center gap-2">
+                    <span>At the start,</span>
+                    <ChoiceButton 
+                        label="Jacky" 
+                        isSelected={choiceAnswers['q6'] === 'Jacky'} 
+                        isCorrect={CORRECT_CHOICE['q6'] === 'Jacky'} 
+                        onClick={() => toggleChoice('q6', 'Jacky')} 
+                    />
+                    <span className="text-slate-300">/</span>
+                    <ChoiceButton 
+                        label="Mum" 
+                        isSelected={choiceAnswers['q6'] === 'Mum'} 
+                        isCorrect={CORRECT_CHOICE['q6'] === 'Mum'} 
+                        onClick={() => toggleChoice('q6', 'Mum')} 
+                    />
+                    <span>doesn't want to go.</span>
+                </div>
+            </QuestionCard>
 
             {/* Q7 */}
-            <div className="flex flex-wrap items-center gap-3 p-4 rounded-2xl hover:bg-gray-50 transition-colors">
-                <span className="font-black text-white bg-teal-400 w-12 h-12 rounded-full flex items-center justify-center text-xl shadow-sm shrink-0">7.</span>
-                <span>At the end, Jacky thinks it is</span>
-                <CircleChoice qId="q7" val="boring" label="boring" />
-                <span className="font-bold text-gray-400">/</span>
-                <CircleChoice qId="q7" val="fun" label="fun" />
-                <span>. 🤩</span>
-            </div>
-        </div>
-      </div>
+            <QuestionCard number="7">
+                 <p className="text-2xl font-black text-slate-700 mb-6">How was it? 🤩</p>
+                 <div className="text-xl md:text-2xl font-bold text-slate-500 leading-loose flex flex-wrap items-center gap-2">
+                    <span>At the end, Jacky thinks it is</span>
+                    <ChoiceButton 
+                        label="boring" 
+                        isSelected={choiceAnswers['q7'] === 'boring'} 
+                        isCorrect={CORRECT_CHOICE['q7'] === 'boring'} 
+                        onClick={() => toggleChoice('q7', 'boring')} 
+                    />
+                    <span className="text-slate-300">/</span>
+                    <ChoiceButton 
+                        label="fun" 
+                        isSelected={choiceAnswers['q7'] === 'fun'} 
+                        isCorrect={CORRECT_CHOICE['q7'] === 'fun'} 
+                        onClick={() => toggleChoice('q7', 'fun')} 
+                    />
+                    <span>.</span>
+                </div>
+            </QuestionCard>
 
-       {/* Part 4: Final Question */}
-       <div className="bg-amber-100 rounded-[2rem] p-6 shadow-lg border-[6px] border-amber-200 relative overflow-hidden">
-            <span className="absolute -right-4 -top-4 text-7xl opacity-10 rotate-12">❓</span>
-            <h3 className="text-4xl font-bold text-amber-900 mb-6">What does Jacky say at the end of the story? 💬</h3>
-            <div className="grid gap-3">
+         </div>
+      </section>
+
+      {/* Part C: Final */}
+      <section>
+          <div className="bg-amber-100 rounded-[2.5rem] p-8 md:p-10 border-[6px] border-amber-300 shadow-xl relative overflow-hidden group">
+            {/* Background Icon */}
+            <div className="absolute -right-8 -top-8 text-9xl text-amber-200 opacity-60 rotate-12 group-hover:rotate-0 transition-transform duration-500">💬</div>
+            
+            <h3 className="text-3xl font-black text-amber-800 mb-8 relative z-10">What does Jacky say at the end?</h3>
+            
+            <div className="space-y-3 relative z-10">
                 {[
                     "No way! Can we come again next weekend? 😆",
                     "I want to go home now. 🏠",
@@ -281,14 +341,13 @@ export const PostReadingSection: React.FC = () => {
                 ].map((option, idx) => {
                     const isSelected = finalAnswer === option;
                     const isCorrect = option === CORRECT_FINAL;
-                    let btnClass = "bg-white border-amber-200 hover:border-amber-400 shadow-sm text-gray-600";
                     
+                    let btnClass = "bg-white/80 border-amber-200 text-amber-900/70 hover:bg-white hover:border-amber-300";
                     if (isSelected) {
                         if (isCorrect) {
-                            // Lighter green
-                            btnClass = "bg-green-50 border-green-300 text-green-500 shadow-none scale-[0.98]";
+                            btnClass = "bg-green-100 border-green-400 text-green-800 shadow-md ring-2 ring-green-200";
                         } else {
-                            btnClass = "bg-red-100 border-red-400 text-red-800 shadow-none";
+                            btnClass = "bg-red-50 border-red-300 text-red-800";
                         }
                     }
 
@@ -296,17 +355,16 @@ export const PostReadingSection: React.FC = () => {
                         <button
                             key={idx}
                             onClick={() => setFinalAnswer(option)}
-                            className={`
-                                text-left p-4 rounded-2xl border-[3px] text-3xl font-medium transition-all
-                                ${btnClass}
-                            `}
+                            className={`w-full text-left p-5 rounded-2xl border-[3px] text-xl md:text-2xl font-bold transition-all ${btnClass}`}
                         >
                             {option}
                         </button>
                     );
                 })}
             </div>
-       </div>
+          </div>
+      </section>
+
     </div>
   );
 };

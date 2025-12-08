@@ -9,7 +9,7 @@ interface StoryReaderProps {
 
 // Simple Helper to find if a word matches our vocab list
 const findVocab = (text: string): VocabularyWord | undefined => {
-  const cleanText = text.replace(/[^a-zA-Z]/g, '').toLowerCase();
+  const cleanText = text.replace(/[^a-zA-Z\s]/g, '').toLowerCase(); // Allow spaces for phrases
   return VOCABULARY_DATA.find(v => v.word.toLowerCase() === cleanText);
 };
 
@@ -138,42 +138,73 @@ export const StoryReader: React.FC<StoryReaderProps> = ({ storyData }) => {
 
   // Function to render text and highlight known vocabulary
   const renderText = (text: string) => {
-    const parts = text.split(" ");
+    // 1. Identify multi-word phrases to protect from splitting
+    // Sort by length descending to ensure longer phrases are matched first
+    const multiWordPhrases = VOCABULARY_DATA
+      .filter(v => v.word.includes(' ') && !v.noStoryHighlight)
+      .sort((a, b) => b.word.length - a.word.length);
+
+    let processedText = text;
+
+    // 2. Replace phrases with a placeholder (replacing spaces with triple underscores)
+    multiWordPhrases.forEach(phrase => {
+        // Regex matches whole words, case-insensitive
+        const regex = new RegExp(`\\b${phrase.word}\\b`, 'gi');
+        processedText = processedText.replace(regex, (match) => match.replace(/ /g, '___'));
+    });
+
+    // 3. Split by normal spaces
+    const parts = processedText.split(" ");
+    
     return parts.map((part, index) => {
+      // Restore original text (turn placeholders back to spaces)
+      const originalContent = part.replace(/___/g, ' ');
+
       // Improved logic to capture (Chinese) even with attached punctuation e.g., (週末)?
       // Matches: start with (, contains ), optional punctuation at end
-      const chineseParenMatch = part.match(/^(\(.*\))([.,?!]+)?$/);
+      const chineseParenMatch = originalContent.match(/^(\(.*\))([.,?!]+)?$/);
 
       if (chineseParenMatch) {
           const content = chineseParenMatch[1]; // The (Chinese) part including Parens
           const punctuation = chineseParenMatch[2] || '';
           return (
              <span key={index} className="mx-1 align-middle">
-                 {/* Reduced font size for Chinese translation */}
+                 {/* Unified font size for Chinese translation - Adjusted to text-base for better balance */}
                  <span className="text-base text-gray-400 font-bold font-['Noto_Sans_TC']">{content}</span>
                  {punctuation && <span className="font-black text-gray-800 ml-0.5">{punctuation}</span>}
              </span>
           );
       }
 
-      // Updated Regex: extract the first sequence of letters anywhere in the string
-      // This handles 'Leave -> Leave and barbecue -> barbecue
-      const wordMatch = part.match(/([a-zA-Z]+)/);
-      const cleanWord = wordMatch ? wordMatch[0] : "";
-      const vocab = findVocab(cleanWord);
+      // Check if it's a vocabulary word (handling attached punctuation at START or END)
+      // Regex captures: Group 1 (Prefix Punctuation), Group 2 (Letters/Spaces), Group 3 (Suffix Punctuation)
+      const wordMatch = originalContent.match(/^([^a-zA-Z\s]*)([a-zA-Z\s]+)([^a-zA-Z\s]*)$/);
+      
+      if (wordMatch) {
+        const prefix = wordMatch[1]; // e.g. " ' " or ""
+        const cleanWord = wordMatch[2]; // "go on a tour" or "Leave"
+        const suffix = wordMatch[3]; // "." or "!" or ""
+        
+        const vocab = findVocab(cleanWord);
 
-      if (vocab && !vocab.noStoryHighlight) {
-        return (
-          <span 
-            key={index} 
-            className="inline-block mx-1 text-pink-600 font-black border-b-2 border-pink-400 cursor-pointer hover:scale-110 transition-transform hover:bg-pink-100 rounded px-1 align-middle"
-            onClick={(e) => handleWordClick(e, cleanWord)}
-          >
-            {part}
-          </span>
-        );
+        if (vocab && !vocab.noStoryHighlight) {
+          return (
+            <span key={index} className="mx-1 align-middle">
+                {prefix && <span className="font-black text-gray-800">{prefix}</span>}
+                <span 
+                    className="inline-block text-pink-600 font-black border-b-2 border-pink-400 cursor-pointer hover:scale-110 transition-transform hover:bg-pink-100 rounded px-1"
+                    onClick={(e) => handleWordClick(e, cleanWord)}
+                >
+                    {cleanWord}
+                </span>
+                {suffix && <span className="font-black text-gray-800">{suffix}</span>}
+            </span>
+          );
+        }
       }
-      return <span key={index} className="mx-1 font-black align-middle">{part}</span>;
+      
+      // Fallback for non-vocab words
+      return <span key={index} className="mx-1 font-black align-middle">{originalContent}</span>;
     });
   };
 
@@ -190,10 +221,10 @@ export const StoryReader: React.FC<StoryReaderProps> = ({ storyData }) => {
   // Helper to render the segment content. Supports interleaved display if '|' is present.
   const renderSegmentContent = (text: string, chinese: string, isActive: boolean) => {
     const engParts = text.split('|');
-    const chiParts = chinese.split('|');
+    // const chiParts = chinese.split('|'); // Unused as we no longer display full Chinese
     const textBaseSize = isActive ? "text-3xl" : "text-2xl"; // Active text is bigger
 
-    if (engParts.length > 1 && engParts.length === chiParts.length) {
+    if (engParts.length > 1) {
       return (
         <div className="flex flex-col gap-3">
           {engParts.map((engPart, idx) => {
@@ -207,9 +238,6 @@ export const StoryReader: React.FC<StoryReaderProps> = ({ storyData }) => {
                    )}
                    <div className={`${textBaseSize} md:${isActive ? 'text-4xl' : 'text-3xl'} leading-relaxed text-gray-800 font-black mb-1 transition-all`}>
                      {renderText(engPart)}
-                   </div>
-                   <div className="text-xl text-gray-500 font-['Noto_Sans_TC'] font-bold opacity-90">
-                     {chiParts[idx]}
                    </div>
                 </div>
              );
@@ -229,9 +257,6 @@ export const StoryReader: React.FC<StoryReaderProps> = ({ storyData }) => {
          )}
          <div className={`${textBaseSize} md:${isActive ? 'text-4xl' : 'text-3xl'} leading-relaxed text-gray-800 font-black mb-3 transition-all`}>
            {renderText(text)}
-         </div>
-         <div className="text-xl text-gray-500 font-['Noto_Sans_TC'] font-bold opacity-90">
-           {chinese}
          </div>
       </div>
     );
