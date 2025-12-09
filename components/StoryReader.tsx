@@ -426,11 +426,11 @@ export const StoryReader: React.FC<StoryReaderProps> = ({ storyData }) => {
         </div>
       )}
 
-      {/* Quiz Modal - Redesigned */}
+      {/* Quiz Modal - Redesigned (Tighter & Bigger Fonts) */}
       {activeQuestion && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md" onClick={() => setActiveQuestion(null)}>
             <div 
-                className="bg-white rounded-[3rem] p-8 max-w-lg w-full shadow-2xl border-[8px] border-yellow-300 relative overflow-hidden animate-bounce-in transform transition-all"
+                className="bg-white rounded-[2rem] p-6 max-w-xl w-full shadow-2xl border-[6px] border-yellow-300 relative overflow-hidden animate-bounce-in transform transition-all"
                 onClick={e => e.stopPropagation()}
             >
                 {/* Decorative header blob */}
@@ -440,35 +440,34 @@ export const StoryReader: React.FC<StoryReaderProps> = ({ storyData }) => {
                 {/* Close Button */}
                 <button 
                  onClick={() => setActiveQuestion(null)}
-                 className="absolute right-6 top-6 bg-gray-100 hover:bg-red-400 hover:text-white rounded-full w-12 h-12 font-bold text-2xl transition-colors z-20 shadow-sm border-2 border-white"
+                 className="absolute right-4 top-4 bg-gray-100 hover:bg-red-400 hover:text-white rounded-full w-10 h-10 font-bold text-xl transition-colors z-20 shadow-sm border-2 border-white"
                 >
                  ✕
                 </button>
 
                 {/* Content */}
-                <div className="mt-8 text-center relative z-10">
-                    <div className="inline-block bg-yellow-100 text-yellow-700 px-6 py-2 rounded-full font-black text-xl mb-6 border-2 border-yellow-200 shadow-sm transform -rotate-2">
+                <div className="mt-2 text-center relative z-10">
+                    <div className="inline-block bg-yellow-100 text-yellow-700 px-8 py-2 rounded-full font-black text-3xl mb-4 border-2 border-yellow-200 shadow-sm transform -rotate-2">
                         Quiz Time! 🧠
                     </div>
                     
-                    <h3 className="text-3xl font-black text-gray-800 mb-8 leading-snug drop-shadow-sm">
+                    <h3 className="text-4xl md:text-5xl font-black text-gray-800 mb-5 leading-tight drop-shadow-sm">
                         {activeQuestion.question.split(/(\(.*\))/).map((part, i) => {
                             if (part.startsWith('(') && part.endsWith(')')) {
-                                // Reduced font size here from text-2xl to text-lg
-                                return <span key={i} className="block text-lg text-gray-500 font-bold mt-2 font-['Noto_Sans_TC']">{part}</span>
+                                return <span key={i} className="block text-2xl text-gray-500 font-bold mt-1 font-['Noto_Sans_TC']">{part}</span>
                             }
                             return <span key={i}>{part}</span>
                         })}
                     </h3>
                     
-                    <div className="grid grid-cols-1 gap-4">
+                    <div className="grid grid-cols-1 gap-3">
                         {currentOptions.map((opt, idx) => (
                             <button
                                 key={idx}
                                 onClick={() => handleOptionSelect(opt)}
                                 disabled={questionFeedback !== null}
                                 className={`
-                                    py-4 px-6 rounded-2xl text-xl font-bold border-b-4 transition-all transform active:scale-95 active:border-b-0 active:translate-y-1
+                                    py-3 px-5 rounded-xl text-2xl md:text-3xl font-bold border-b-4 transition-all transform active:scale-95 active:border-b-0 active:translate-y-1
                                     ${questionFeedback === 'correct' && opt === activeQuestion.correctAnswer 
                                         ? 'bg-green-500 border-green-700 text-white shadow-lg' 
                                         : questionFeedback === 'incorrect' && opt !== activeQuestion.correctAnswer
@@ -487,7 +486,7 @@ export const StoryReader: React.FC<StoryReaderProps> = ({ storyData }) => {
                     
                      {/* Feedback Overlay - Incorrect */}
                      {questionFeedback === 'incorrect' && (
-                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20 bg-red-100/10 backdrop-blur-[1px] rounded-[2.5rem]">
+                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20 bg-red-100/10 backdrop-blur-[1px] rounded-[2rem]">
                             <div className="text-9xl animate-shake drop-shadow-lg filter grayscale opacity-80">❌</div>
                         </div>
                     )}

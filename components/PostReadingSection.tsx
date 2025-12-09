@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 
-// Reusable Components for Consistency (Moved outside to fix type and performance issues)
+// Reusable Components for Consistency
 
 interface ChoiceButtonProps {
     label: string;
@@ -11,7 +11,7 @@ interface ChoiceButtonProps {
 }
 
 const ChoiceButton: React.FC<ChoiceButtonProps> = ({ label, isSelected, isCorrect, onClick }) => {
-    let baseClass = "px-4 py-2 rounded-xl border-[3px] font-bold text-lg md:text-xl transition-all transform hover:-translate-y-0.5 active:translate-y-0 shadow-sm";
+    let baseClass = "px-3 py-1.5 md:px-4 md:py-2 rounded-xl border-[3px] font-bold text-lg md:text-2xl transition-all transform hover:-translate-y-0.5 active:translate-y-0 shadow-sm";
     let stateClass = "bg-white border-slate-200 text-slate-600 hover:bg-slate-50 hover:border-slate-300"; // Default
 
     if (isSelected) {
@@ -35,11 +35,11 @@ interface QuestionCardProps {
 }
 
 const QuestionCard: React.FC<QuestionCardProps> = ({ number, children }) => (
-    <div className="bg-white rounded-[2rem] shadow-sm border-[4px] border-slate-100 overflow-hidden relative hover:border-slate-200 transition-colors group">
-        <div className="absolute top-0 left-0 bg-slate-100 text-slate-500 px-5 py-2 rounded-br-2xl font-black text-xl border-b-[3px] border-r-[3px] border-slate-200 z-10 group-hover:bg-slate-200 group-hover:text-slate-600 transition-colors">
+    <div className="bg-white rounded-[1.5rem] shadow-sm border-[4px] border-slate-100 overflow-hidden relative hover:border-slate-200 transition-colors group">
+        <div className="absolute top-0 left-0 bg-slate-100 text-slate-500 px-4 py-1 rounded-br-2xl font-black text-lg border-b-[3px] border-r-[3px] border-slate-200 z-10 group-hover:bg-slate-200 group-hover:text-slate-600 transition-colors">
             {number}
         </div>
-        <div className="p-6 md:p-8 pt-16 md:pt-14">
+        <div className="p-4 pt-12 md:p-5 md:pt-12">
             {children}
         </div>
     </div>
@@ -52,8 +52,8 @@ interface SectionHeaderProps {
 }
 
 const SectionHeader: React.FC<SectionHeaderProps> = ({ icon, title, colorClass }) => (
-    <div className="flex items-center gap-4 mb-6 mt-12 first:mt-0">
-        <div className={`w-14 h-14 ${colorClass} rounded-2xl flex items-center justify-center text-white text-2xl font-black shadow-md transform -rotate-3`}>
+    <div className="flex items-center gap-3 mb-2 mt-4 first:mt-0">
+        <div className={`w-10 h-10 md:w-12 md:h-12 ${colorClass} rounded-xl flex items-center justify-center text-white text-xl md:text-2xl font-black shadow-md transform -rotate-3`}>
             {icon}
         </div>
         <h3 className="text-3xl md:text-4xl font-black text-slate-700 tracking-tight">{title}</h3>
@@ -88,11 +88,27 @@ export const PostReadingSection: React.FC = () => {
   const CORRECT_FINAL = "No way! Can we come again next weekend? 😆";
 
   const toggleChoice = (qId: string, value: string) => {
-    setChoiceAnswers(prev => ({...prev, [qId]: value}));
+    setChoiceAnswers(prev => {
+        // Toggle off if clicking the selected one
+        if (prev[qId] === value) {
+            const newItem = { ...prev };
+            delete newItem[qId];
+            return newItem;
+        }
+        return { ...prev, [qId]: value };
+    });
   };
 
   const handleFillSelect = (key: string, value: string) => {
-    setFillAnswers(prev => ({...prev, [key]: value}));
+    setFillAnswers(prev => {
+        // Toggle off if clicking the selected one
+        if (prev[key] === value) {
+            const newItem = { ...prev };
+            delete newItem[key];
+            return newItem;
+        }
+        return { ...prev, [key]: value };
+    });
   };
 
   const options = {
@@ -104,26 +120,25 @@ export const PostReadingSection: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto pb-48 px-4 space-y-8">
+    <div className="max-w-4xl mx-auto pb-48 px-3 space-y-4">
       
       {/* Page Instruction */}
-      <div className="text-center mb-12 space-y-4">
-         <div className="inline-block bg-orange-100 text-orange-600 px-8 py-2 rounded-full font-bold border-2 border-orange-200 animate-bounce">
-           Turn to page 51 📖
+      <div className="text-center mb-4 space-y-2">
+         <div className="inline-block bg-orange-100 text-orange-600 px-6 py-1.5 rounded-full font-bold border-2 border-orange-200 text-sm md:text-base animate-bounce">
+           Page 51 📖
          </div>
-         <h2 className="text-5xl font-black text-slate-800 tracking-tight drop-shadow-sm">
-            Quiz Time! <span className="text-4xl align-middle">✍️</span>
+         <h2 className="text-4xl md:text-5xl font-black text-slate-800 tracking-tight drop-shadow-sm">
+            Quiz Time! <span className="text-3xl align-middle">✍️</span>
          </h2>
-         <p className="text-xl text-slate-400 font-bold font-['Noto_Sans_TC']">Check your understanding</p>
       </div>
 
       {/* Part A: Ordering */}
       <section>
-          <SectionHeader icon="A" title="Order the Events (1-5)" colorClass="bg-teal-400" />
+          <SectionHeader icon="A" title="Order (1-5)" colorClass="bg-teal-400" />
           
-          <div className="bg-white rounded-[2.5rem] p-6 md:p-10 border-[6px] border-teal-100 shadow-xl space-y-4 relative overflow-hidden">
+          <div className="bg-white rounded-[2rem] p-4 md:p-6 border-[5px] border-teal-100 shadow-lg space-y-2 relative overflow-hidden">
               {/* Decorative Number Bg */}
-              <div className="absolute -right-10 -bottom-10 text-9xl font-black text-teal-50 opacity-50 pointer-events-none select-none">123</div>
+              <div className="absolute -right-6 -bottom-8 text-8xl font-black text-teal-50 opacity-50 pointer-events-none select-none">123</div>
 
               {[
                 { id: "A", text: "The family go on a tour of a farm. 🚜" },
@@ -145,19 +160,19 @@ export const PostReadingSection: React.FC = () => {
                 }
 
                 return (
-                    <div key={item.id} className="flex items-center gap-4 group">
+                    <div key={item.id} className="flex items-center gap-3 group">
                         <div className="relative shrink-0">
                             <input 
                                 type="number" 
                                 min="1" 
                                 max="5"
                                 placeholder="-"
-                                className={`w-16 h-16 text-center text-3xl rounded-2xl border-[4px] shadow-sm outline-none transition-all ${inputStyle}`}
+                                className={`w-12 h-12 md:w-14 md:h-14 text-center text-2xl md:text-3xl rounded-xl border-[3px] shadow-sm outline-none transition-all ${inputStyle}`}
                                 value={userVal}
                                 onChange={(e) => setOrderAnswers({...orderAnswers, [item.id]: e.target.value})}
                             />
                         </div>
-                        <p className="text-xl md:text-2xl font-bold text-slate-600 group-hover:text-slate-800 transition-colors leading-snug">
+                        <p className="text-xl md:text-2xl font-bold text-slate-600 group-hover:text-slate-800 transition-colors leading-tight">
                             {item.text}
                         </p>
                     </div>
@@ -168,36 +183,40 @@ export const PostReadingSection: React.FC = () => {
 
       {/* Part B: Questions */}
       <section>
-         <SectionHeader icon="B" title="Questions & Answers" colorClass="bg-indigo-400" />
+         <SectionHeader icon="B" title="Questions" colorClass="bg-indigo-400" />
          
-         <div className="grid grid-cols-1 gap-6">
+         <div className="grid grid-cols-1 gap-3">
             
             {/* Q2 */}
             <QuestionCard number="2">
-                <p className="text-2xl font-black text-slate-700 mb-6">Why does Jacky want to stay home? 🏠</p>
-                <div className="text-xl md:text-2xl font-bold text-slate-500 leading-loose">
+                <p className="text-2xl md:text-3xl font-black text-slate-700 mb-2">Why does Jacky want to stay home? 🏠</p>
+                <div className="text-xl md:text-2xl font-bold text-slate-500 leading-relaxed">
                     <span className="inline-block mr-2 text-slate-400">He wants</span>
                     <div className="inline-flex flex-wrap gap-2 align-middle">
-                        {options.q2a.map(opt => (
-                            <ChoiceButton 
-                                key={opt} 
-                                label={opt} 
-                                isSelected={fillAnswers['q2a'] === opt} 
-                                isCorrect={CORRECT_FILL['q2a'] === opt}
-                                onClick={() => handleFillSelect('q2a', opt)} 
-                            />
+                        {options.q2a
+                            .filter(opt => !fillAnswers['q2a'] || fillAnswers['q2a'] === opt)
+                            .map(opt => (
+                                <ChoiceButton 
+                                    key={opt} 
+                                    label={opt} 
+                                    isSelected={fillAnswers['q2a'] === opt} 
+                                    isCorrect={CORRECT_FILL['q2a'] === opt}
+                                    onClick={() => handleFillSelect('q2a', opt)} 
+                                />
                         ))}
                     </div>
                     <span className="inline-block mx-2 text-slate-400">because</span>
                     <div className="inline-flex flex-wrap gap-2 align-middle">
-                        {options.q2b.map(opt => (
-                            <ChoiceButton 
-                                key={opt} 
-                                label={opt} 
-                                isSelected={fillAnswers['q2b'] === opt} 
-                                isCorrect={CORRECT_FILL['q2b'] === opt}
-                                onClick={() => handleFillSelect('q2b', opt)} 
-                            />
+                        {options.q2b
+                            .filter(opt => !fillAnswers['q2b'] || fillAnswers['q2b'] === opt)
+                            .map(opt => (
+                                <ChoiceButton 
+                                    key={opt} 
+                                    label={opt} 
+                                    isSelected={fillAnswers['q2b'] === opt} 
+                                    isCorrect={CORRECT_FILL['q2b'] === opt}
+                                    onClick={() => handleFillSelect('q2b', opt)} 
+                                />
                         ))}
                     </div>
                     <span className="text-slate-400">.</span>
@@ -206,18 +225,20 @@ export const PostReadingSection: React.FC = () => {
 
             {/* Q3 */}
             <QuestionCard number="3">
-                <p className="text-2xl font-black text-slate-700 mb-6">When does Jacky visit the farm? 📅</p>
-                <div className="text-xl md:text-2xl font-bold text-slate-500 leading-loose">
+                <p className="text-2xl md:text-3xl font-black text-slate-700 mb-2">When does Jacky visit the farm? 📅</p>
+                <div className="text-xl md:text-2xl font-bold text-slate-500 leading-relaxed">
                     <span className="inline-block mr-2 text-slate-400">He</span>
                     <div className="inline-flex flex-wrap gap-2 align-middle">
-                        {options.q3.map(opt => (
-                            <ChoiceButton 
-                                key={opt} 
-                                label={opt} 
-                                isSelected={fillAnswers['q3'] === opt} 
-                                isCorrect={CORRECT_FILL['q3'] === opt}
-                                onClick={() => handleFillSelect('q3', opt)} 
-                            />
+                        {options.q3
+                            .filter(opt => !fillAnswers['q3'] || fillAnswers['q3'] === opt)
+                            .map(opt => (
+                                <ChoiceButton 
+                                    key={opt} 
+                                    label={opt} 
+                                    isSelected={fillAnswers['q3'] === opt} 
+                                    isCorrect={CORRECT_FILL['q3'] === opt}
+                                    onClick={() => handleFillSelect('q3', opt)} 
+                                />
                         ))}
                     </div>
                     <span className="text-slate-400">.</span>
@@ -226,30 +247,34 @@ export const PostReadingSection: React.FC = () => {
 
             {/* Q4 */}
             <QuestionCard number="4">
-                <p className="text-2xl font-black text-slate-700 mb-6">What does Jacky eat on the farm? 🍎</p>
-                <div className="text-xl md:text-2xl font-bold text-slate-500 leading-loose">
+                <p className="text-2xl md:text-3xl font-black text-slate-700 mb-2">What does Jacky eat on the farm? 🍎</p>
+                <div className="text-xl md:text-2xl font-bold text-slate-500 leading-relaxed">
                     <span className="inline-block mr-2 text-slate-400">He</span>
                     <div className="inline-flex flex-wrap gap-2 align-middle">
-                        {options.q4a.map(opt => (
-                            <ChoiceButton 
-                                key={opt} 
-                                label={opt} 
-                                isSelected={fillAnswers['q4a'] === opt} 
-                                isCorrect={CORRECT_FILL['q4a'] === opt}
-                                onClick={() => handleFillSelect('q4a', opt)} 
-                            />
+                        {options.q4a
+                            .filter(opt => !fillAnswers['q4a'] || fillAnswers['q4a'] === opt)
+                            .map(opt => (
+                                <ChoiceButton 
+                                    key={opt} 
+                                    label={opt} 
+                                    isSelected={fillAnswers['q4a'] === opt} 
+                                    isCorrect={CORRECT_FILL['q4a'] === opt}
+                                    onClick={() => handleFillSelect('q4a', opt)} 
+                                />
                         ))}
                     </div>
                     <span className="inline-block mx-2 text-slate-400">some</span>
                     <div className="inline-flex flex-wrap gap-2 align-middle">
-                        {options.q4b.map(opt => (
-                            <ChoiceButton 
-                                key={opt} 
-                                label={opt} 
-                                isSelected={fillAnswers['q4b'] === opt} 
-                                isCorrect={CORRECT_FILL['q4b'] === opt}
-                                onClick={() => handleFillSelect('q4b', opt)} 
-                            />
+                        {options.q4b
+                            .filter(opt => !fillAnswers['q4b'] || fillAnswers['q4b'] === opt)
+                            .map(opt => (
+                                <ChoiceButton 
+                                    key={opt} 
+                                    label={opt} 
+                                    isSelected={fillAnswers['q4b'] === opt} 
+                                    isCorrect={CORRECT_FILL['q4b'] === opt}
+                                    onClick={() => handleFillSelect('q4b', opt)} 
+                                />
                         ))}
                     </div>
                     <span className="text-slate-400">.</span>
@@ -258,66 +283,78 @@ export const PostReadingSection: React.FC = () => {
 
             {/* Q5 */}
             <QuestionCard number="5">
-                <p className="text-2xl font-black text-slate-700 mb-6">Whose idea is it? 💡</p>
-                <div className="text-xl md:text-2xl font-bold text-slate-500 leading-loose flex flex-wrap items-center gap-2">
+                <p className="text-2xl md:text-3xl font-black text-slate-700 mb-2">Whose idea is it? 💡</p>
+                <div className="text-xl md:text-2xl font-bold text-slate-500 leading-relaxed flex flex-wrap items-center gap-2">
                     <span>It is</span>
-                    <ChoiceButton 
-                        label="Dad's" 
-                        isSelected={choiceAnswers['q5'] === 'Dad'} 
-                        isCorrect={CORRECT_CHOICE['q5'] === 'Dad'} 
-                        onClick={() => toggleChoice('q5', 'Dad')} 
-                    />
-                    <span className="text-slate-300">/</span>
-                    <ChoiceButton 
-                        label="Mum's" 
-                        isSelected={choiceAnswers['q5'] === 'Mum'} 
-                        isCorrect={CORRECT_CHOICE['q5'] === 'Mum'} 
-                        onClick={() => toggleChoice('q5', 'Mum')} 
-                    />
+                    {(!choiceAnswers['q5'] || choiceAnswers['q5'] === 'Dad') && (
+                        <ChoiceButton 
+                            label="Dad's" 
+                            isSelected={choiceAnswers['q5'] === 'Dad'} 
+                            isCorrect={CORRECT_CHOICE['q5'] === 'Dad'} 
+                            onClick={() => toggleChoice('q5', 'Dad')} 
+                        />
+                    )}
+                    {!choiceAnswers['q5'] && <span className="text-slate-300">/</span>}
+                    {(!choiceAnswers['q5'] || choiceAnswers['q5'] === 'Mum') && (
+                        <ChoiceButton 
+                            label="Mum's" 
+                            isSelected={choiceAnswers['q5'] === 'Mum'} 
+                            isCorrect={CORRECT_CHOICE['q5'] === 'Mum'} 
+                            onClick={() => toggleChoice('q5', 'Mum')} 
+                        />
+                    )}
                     <span>idea to visit a real farm.</span>
                 </div>
             </QuestionCard>
 
             {/* Q6 */}
             <QuestionCard number="6">
-                <p className="text-2xl font-black text-slate-700 mb-6">Who doesn't want to go? 🙅</p>
-                <div className="text-xl md:text-2xl font-bold text-slate-500 leading-loose flex flex-wrap items-center gap-2">
+                <p className="text-2xl md:text-3xl font-black text-slate-700 mb-2">Who doesn't want to go? 🙅</p>
+                <div className="text-xl md:text-2xl font-bold text-slate-500 leading-relaxed flex flex-wrap items-center gap-2">
                     <span>At the start,</span>
-                    <ChoiceButton 
-                        label="Jacky" 
-                        isSelected={choiceAnswers['q6'] === 'Jacky'} 
-                        isCorrect={CORRECT_CHOICE['q6'] === 'Jacky'} 
-                        onClick={() => toggleChoice('q6', 'Jacky')} 
-                    />
-                    <span className="text-slate-300">/</span>
-                    <ChoiceButton 
-                        label="Mum" 
-                        isSelected={choiceAnswers['q6'] === 'Mum'} 
-                        isCorrect={CORRECT_CHOICE['q6'] === 'Mum'} 
-                        onClick={() => toggleChoice('q6', 'Mum')} 
-                    />
+                    {(!choiceAnswers['q6'] || choiceAnswers['q6'] === 'Jacky') && (
+                        <ChoiceButton 
+                            label="Jacky" 
+                            isSelected={choiceAnswers['q6'] === 'Jacky'} 
+                            isCorrect={CORRECT_CHOICE['q6'] === 'Jacky'} 
+                            onClick={() => toggleChoice('q6', 'Jacky')} 
+                        />
+                    )}
+                    {!choiceAnswers['q6'] && <span className="text-slate-300">/</span>}
+                    {(!choiceAnswers['q6'] || choiceAnswers['q6'] === 'Mum') && (
+                        <ChoiceButton 
+                            label="Mum" 
+                            isSelected={choiceAnswers['q6'] === 'Mum'} 
+                            isCorrect={CORRECT_CHOICE['q6'] === 'Mum'} 
+                            onClick={() => toggleChoice('q6', 'Mum')} 
+                        />
+                    )}
                     <span>doesn't want to go.</span>
                 </div>
             </QuestionCard>
 
             {/* Q7 */}
             <QuestionCard number="7">
-                 <p className="text-2xl font-black text-slate-700 mb-6">How was it? 🤩</p>
-                 <div className="text-xl md:text-2xl font-bold text-slate-500 leading-loose flex flex-wrap items-center gap-2">
+                 <p className="text-2xl md:text-3xl font-black text-slate-700 mb-2">How was it? 🤩</p>
+                 <div className="text-xl md:text-2xl font-bold text-slate-500 leading-relaxed flex flex-wrap items-center gap-2">
                     <span>At the end, Jacky thinks it is</span>
-                    <ChoiceButton 
-                        label="boring" 
-                        isSelected={choiceAnswers['q7'] === 'boring'} 
-                        isCorrect={CORRECT_CHOICE['q7'] === 'boring'} 
-                        onClick={() => toggleChoice('q7', 'boring')} 
-                    />
-                    <span className="text-slate-300">/</span>
-                    <ChoiceButton 
-                        label="fun" 
-                        isSelected={choiceAnswers['q7'] === 'fun'} 
-                        isCorrect={CORRECT_CHOICE['q7'] === 'fun'} 
-                        onClick={() => toggleChoice('q7', 'fun')} 
-                    />
+                    {(!choiceAnswers['q7'] || choiceAnswers['q7'] === 'boring') && (
+                        <ChoiceButton 
+                            label="boring" 
+                            isSelected={choiceAnswers['q7'] === 'boring'} 
+                            isCorrect={CORRECT_CHOICE['q7'] === 'boring'} 
+                            onClick={() => toggleChoice('q7', 'boring')} 
+                        />
+                    )}
+                    {!choiceAnswers['q7'] && <span className="text-slate-300">/</span>}
+                    {(!choiceAnswers['q7'] || choiceAnswers['q7'] === 'fun') && (
+                        <ChoiceButton 
+                            label="fun" 
+                            isSelected={choiceAnswers['q7'] === 'fun'} 
+                            isCorrect={CORRECT_CHOICE['q7'] === 'fun'} 
+                            onClick={() => toggleChoice('q7', 'fun')} 
+                        />
+                    )}
                     <span>.</span>
                 </div>
             </QuestionCard>
@@ -327,18 +364,20 @@ export const PostReadingSection: React.FC = () => {
 
       {/* Part C: Final */}
       <section>
-          <div className="bg-amber-100 rounded-[2.5rem] p-8 md:p-10 border-[6px] border-amber-300 shadow-xl relative overflow-hidden group">
+          <div className="bg-amber-100 rounded-[2rem] p-4 md:p-6 border-[5px] border-amber-300 shadow-lg relative overflow-hidden group">
             {/* Background Icon */}
-            <div className="absolute -right-8 -top-8 text-9xl text-amber-200 opacity-60 rotate-12 group-hover:rotate-0 transition-transform duration-500">💬</div>
+            <div className="absolute -right-8 -top-8 text-8xl text-amber-200 opacity-60 rotate-12 group-hover:rotate-0 transition-transform duration-500">💬</div>
             
-            <h3 className="text-3xl font-black text-amber-800 mb-8 relative z-10">What does Jacky say at the end?</h3>
+            <h3 className="text-3xl md:text-4xl font-black text-amber-800 mb-4 relative z-10">What does Jacky say?</h3>
             
-            <div className="space-y-3 relative z-10">
+            <div className="space-y-2 relative z-10">
                 {[
                     "No way! Can we come again next weekend? 😆",
                     "I want to go home now. 🏠",
                     "Farm Life is better than a real farm. 🎮"
-                ].map((option, idx) => {
+                ]
+                .filter(option => !finalAnswer || finalAnswer === option)
+                .map((option, idx) => {
                     const isSelected = finalAnswer === option;
                     const isCorrect = option === CORRECT_FINAL;
                     
@@ -353,9 +392,9 @@ export const PostReadingSection: React.FC = () => {
 
                     return (
                         <button
-                            key={idx}
-                            onClick={() => setFinalAnswer(option)}
-                            className={`w-full text-left p-5 rounded-2xl border-[3px] text-xl md:text-2xl font-bold transition-all ${btnClass}`}
+                            key={option} 
+                            onClick={() => setFinalAnswer(prev => prev === option ? null : option)}
+                            className={`w-full text-left px-4 py-3 rounded-xl border-[3px] text-xl md:text-2xl font-bold transition-all ${btnClass}`}
                         >
                             {option}
                         </button>

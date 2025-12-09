@@ -35,7 +35,7 @@ export const WarmUpChat: React.FC = () => {
   }
 
   return (
-    <div className="max-w-3xl mx-auto pb-48 px-4">
+    <div className="max-w-5xl mx-auto pb-48 px-4">
       
       {/* Header Badge */}
       <div className="text-center mb-12 relative">
@@ -73,20 +73,20 @@ export const WarmUpChat: React.FC = () => {
 
           {/* User's Turn (Answers) */}
           <div className="w-full">
-              <p className="text-gray-400 font-bold mb-4 text-sm uppercase tracking-widest">Your Turn</p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+              <p className="text-gray-400 font-bold mb-4 text-sm uppercase tracking-widest pl-4">Your Turn</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                   {q.answers.map((ans, idx) => (
                       <button
                           key={idx}
                           onClick={() => handleQuestionAnswer(ans.text)}
-                          className="bg-white p-3 rounded-[2rem] border-[4px] border-purple-50 shadow-md hover:border-purple-300 hover:bg-purple-50 hover:shadow-[0_8px_0_0_rgba(216,180,254,1)] hover:-translate-y-1 active:shadow-none active:translate-y-1 active:border-purple-400 transition-all group text-left flex items-center gap-3 relative overflow-hidden"
+                          className="bg-white p-4 rounded-[2rem] border-[4px] border-purple-50 shadow-md hover:border-purple-300 hover:bg-purple-50 hover:shadow-[0_8px_0_0_rgba(216,180,254,1)] hover:-translate-y-1 active:shadow-none active:translate-y-1 active:border-purple-400 transition-all group text-left flex items-center gap-4 relative overflow-hidden h-full min-h-[100px]"
                       >
                           {/* Circle backing for emoji */}
-                          <div className="w-12 h-12 bg-purple-100 rounded-2xl flex items-center justify-center text-2xl group-hover:scale-110 group-hover:rotate-6 transition-transform shrink-0 border-2 border-purple-200">
+                          <div className="w-14 h-14 bg-purple-100 rounded-2xl flex items-center justify-center text-3xl group-hover:scale-110 group-hover:rotate-6 transition-transform shrink-0 border-2 border-purple-200">
                               {ans.icon}
                           </div>
                           
-                          <span className="text-lg font-bold text-gray-700 font-['Comic_Neue'] relative z-10 leading-tight">
+                          <span className="text-xl font-bold text-gray-700 font-['Comic_Neue'] relative z-10 leading-tight">
                               {ans.text}
                           </span>
                       </button>

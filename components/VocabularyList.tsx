@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { VocabularyWord } from '../types';
 
 interface VocabularyListProps {
@@ -11,6 +11,7 @@ const PASSAGE_WORDS = ["boo", "tongue", "boring", "sounds", "triple", "sweet pot
 
 // Specific words requested for the games
 const GAME_TARGET_WORDS = [
+  "outdoor activities",
   "plant vegetables",
   "pick fruit",
   "feed animals",
@@ -22,21 +23,42 @@ const GAME_TARGET_WORDS = [
   "have a picnic",
   "go camping",
   "have a barbecue",
-  "goat",
   "real",
   "plans",
-  "outing"
+  "outing",
+  "leave",
+  "feels",
+  "no way",
+  "weekend",
+  "use",
+  "busy",
+  "phone",
+  "sunrise",
+  "sunset",
+  "goat"
 ];
 
 // Data for Sentence Builder
 const GAME_SENTENCES = [
-    { sentence: "I want to ___ a sandcastle.", answer: "build", options: ["build", "plant", "look"] },
-    { sentence: "Let's ___ swimming.", answer: "go", options: ["have", "go", "pick"] },
-    { sentence: "We can ___ animals.", answer: "feed", options: ["build", "feed", "ride"] },
-    { sentence: "The apples are ___.", answer: "sweet", options: ["wet", "sweet", "busy"] },
-    { sentence: "I ___ a horse.", answer: "ride", options: ["ride", "look", "use"] },
-    { sentence: "We have a ___ in the park.", answer: "picnic", options: ["phone", "picnic", "goat"] }
+    { sentence: "We ___ vegetables in the garden.", answer: "plant", options: ["plant", "pick", "feed"] },
+    { sentence: "I like to ___ animals.", answer: "feed", options: ["feed", "build", "ride"] },
+    { sentence: "Let's ___ a sandcastle.", answer: "build", options: ["build", "look", "take"] },
+    { sentence: "Mum likes to ___ photos.", answer: "take", options: ["take", "have", "go"] },
+    { sentence: "We ___ camping in the holiday.", answer: "go", options: ["go", "have", "use"] },
+    { sentence: "This is a ___ farm.", answer: "real", options: ["real", "busy", "wet"] },
+    { sentence: "___ your phone at home.", answer: "Leave", options: ["Leave", "Use", "Plan"] },
+    { sentence: "Have a nice ___.", answer: "weekend", options: ["weekend", "outing", "sunset"] }
 ];
+
+// Helper to shuffle array (Fisher-Yates)
+function shuffleArray<T>(array: T[]): T[] {
+    const newArray = [...array];
+    for (let i = newArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    return newArray;
+}
 
 export const VocabularyList: React.FC<VocabularyListProps> = ({ words }) => {
   // Filter out words that should be hidden from this list
@@ -51,6 +73,13 @@ export const VocabularyList: React.FC<VocabularyListProps> = ({ words }) => {
     GAME_TARGET_WORDS.includes(w.word) || 
     GAME_TARGET_WORDS.includes(w.word.toLowerCase())
   );
+
+  // --- Queues for random non-repeating logic ---
+  const [matchQueue, setMatchQueue] = useState<VocabularyWord[]>([]);
+  const [emojiQueue, setEmojiQueue] = useState<VocabularyWord[]>([]);
+  const [spellingQueue, setSpellingQueue] = useState<VocabularyWord[]>([]);
+  const [bubbleQueue, setBubbleQueue] = useState<VocabularyWord[]>([]);
+  const [sentenceQueue, setSentenceQueue] = useState<number[]>([]);
 
   // --- Game State 1: Word Match (English -> Chinese) ---
   const [matchWord, setMatchWord] = useState<VocabularyWord | null>(null);
@@ -85,14 +114,24 @@ export const VocabularyList: React.FC<VocabularyListProps> = ({ words }) => {
   const [bubbleFeedback, setBubbleFeedback] = useState<'correct' | 'incorrect' | null>(null);
 
   // --- Game State 4: Sentence Builder ---
-  const [sentenceIndex, setSentenceIndex] = useState(0);
+  const [currentSentenceData, setCurrentSentenceData] = useState<typeof GAME_SENTENCES[0] | null>(null);
   const [sentenceFeedback, setSentenceFeedback] = useState<'correct' | 'incorrect' | null>(null);
 
 
   // --- Logic: Game 1 (Match) ---
   const handleNextMatch = () => {
       if (gameWords.length === 0) return;
-      const random = gameWords[Math.floor(Math.random() * gameWords.length)];
+      
+      let nextQueue = [...matchQueue];
+      if (nextQueue.length === 0) {
+          nextQueue = shuffleArray(gameWords);
+      }
+
+      const random = nextQueue.pop();
+      setMatchQueue(nextQueue); // Update queue state
+      
+      if (!random) return; // Should not happen
+
       const getCleanChinese = (t: string) => t.replace(/\s*\(.*?\)/g, '').trim();
       
       const correct = getCleanChinese(random.chinese);
@@ -102,7 +141,7 @@ export const VocabularyList: React.FC<VocabularyListProps> = ({ words }) => {
           .slice(0, 2)
           .map(w => getCleanChinese(w.chinese));
       
-      const opts = [correct, ...distractors].sort(() => 0.5 - Math.random());
+      const opts = shuffleArray([correct, ...distractors]);
       setMatchWord(random);
       setMatchOptions(opts);
       setMatchFeedback(null);
@@ -122,15 +161,32 @@ export const VocabularyList: React.FC<VocabularyListProps> = ({ words }) => {
 
   // --- Logic: Game 2 (Emoji) ---
   const handleNextEmoji = () => {
-    const candidates = gameWords.filter(w => w.emoji && w.emoji.trim() !== '');
-    if (candidates.length === 0) return;
-    const random = candidates[Math.floor(Math.random() * candidates.length)];
+    // Candidates are game words that have an emoji
+    const allEmojiWords = gameWords.filter(w => w.emoji && w.emoji.trim() !== '');
+    if (allEmojiWords.length === 0) return;
+
+    let nextQueue = [...emojiQueue];
+    // Filter queue to ensure it only contains valid emoji words (in case gameWords changed)
+    const validQueue = nextQueue.filter(q => allEmojiWords.some(w => w.word === q.word));
+    
+    if (validQueue.length === 0) {
+        nextQueue = shuffleArray(allEmojiWords);
+    } else {
+        nextQueue = validQueue;
+    }
+
+    const random = nextQueue.pop();
+    setEmojiQueue(nextQueue);
+    
+    if (!random) return;
+
     const distractors = gameWords
         .filter(w => w.word !== random.word)
         .sort(() => 0.5 - Math.random())
         .slice(0, 2)
         .map(w => w.word);
-    const opts = [random.word, ...distractors].sort(() => 0.5 - Math.random());
+    
+    const opts = shuffleArray([random.word, ...distractors]);
     setEmojiWord(random);
     setEmojiOptions(opts);
     setShowEmojiAnswer(false);
@@ -151,7 +207,17 @@ export const VocabularyList: React.FC<VocabularyListProps> = ({ words }) => {
   // --- Logic: Game 3 (Spelling) ---
   const handleNextSpelling = () => {
       if (gameWords.length === 0) return;
-      const random = gameWords[Math.floor(Math.random() * gameWords.length)];
+
+      let nextQueue = [...spellingQueue];
+      if (nextQueue.length === 0) {
+          nextQueue = shuffleArray(gameWords);
+      }
+
+      const random = nextQueue.pop();
+      setSpellingQueue(nextQueue);
+
+      if (!random) return;
+
       setSpellingWord(random);
       
       // Initialize blank slots (null for letters, ' ' for spaces)
@@ -160,7 +226,7 @@ export const VocabularyList: React.FC<VocabularyListProps> = ({ words }) => {
 
       // Scramble letters (excluding spaces)
       const letters = random.word.replace(/ /g, '').split('').map((char, i) => ({ char, id: i }));
-      const scrambled = [...letters].sort(() => 0.5 - Math.random());
+      const scrambled = shuffleArray([...letters]);
       setScrambledLetters(scrambled);
       setSpellingFeedback(null);
   };
@@ -192,7 +258,7 @@ export const VocabularyList: React.FC<VocabularyListProps> = ({ words }) => {
                  setSpellingFeedback(null);
                  // Reset scrambled letters for retry logic is complex, simpler to just restart word
                  const originalLetters = spellingWord!.word.replace(/ /g, '').split('').map((char, i) => ({ char, id: i }));
-                 setScrambledLetters([...originalLetters].sort(() => 0.5 - Math.random()));
+                 setScrambledLetters(shuffleArray([...originalLetters]));
                  setUserSpelling(spellingWord!.word.split('').map(char => char === ' ' ? ' ' : null));
              }, 1000);
           }
@@ -202,7 +268,17 @@ export const VocabularyList: React.FC<VocabularyListProps> = ({ words }) => {
   // --- Logic: Game 5 (Bubble Pop) ---
   const handleNextBubble = () => {
       if (gameWords.length === 0) return;
-      const random = gameWords[Math.floor(Math.random() * gameWords.length)];
+
+      let nextQueue = [...bubbleQueue];
+      if (nextQueue.length === 0) {
+          nextQueue = shuffleArray(gameWords);
+      }
+      
+      const random = nextQueue.pop();
+      setBubbleQueue(nextQueue);
+
+      if (!random) return;
+      
       setBubbleTarget(random);
       
       // Create bubbles
@@ -212,8 +288,7 @@ export const VocabularyList: React.FC<VocabularyListProps> = ({ words }) => {
         .slice(0, 7)
         .map(w => w.word);
       
-      const bubblesData = [random.word, ...distractors]
-         .sort(() => 0.5 - Math.random())
+      const bubblesData = shuffleArray([random.word, ...distractors])
          .map((w, i) => ({
              id: i,
              word: w,
@@ -241,13 +316,31 @@ export const VocabularyList: React.FC<VocabularyListProps> = ({ words }) => {
   };
 
   // --- Logic: Game 4 (Sentence Builder) ---
+  const handleNextSentence = () => {
+      if (GAME_SENTENCES.length === 0) return;
+      
+      let nextQueue = [...sentenceQueue];
+      if (nextQueue.length === 0) {
+          // Create indices array [0, 1, 2, ... length-1] and shuffle
+          const indices = Array.from({ length: GAME_SENTENCES.length }, (_, i) => i);
+          nextQueue = shuffleArray(indices);
+      }
+
+      const index = nextQueue.pop();
+      setSentenceQueue(nextQueue);
+
+      if (index === undefined) return;
+      
+      setCurrentSentenceData(GAME_SENTENCES[index]);
+      setSentenceFeedback(null);
+  }
+
   const handleSentenceGuess = (guess: string) => {
-      const current = GAME_SENTENCES[sentenceIndex];
-      if (guess === current.answer) {
+      if (!currentSentenceData) return;
+      if (guess === currentSentenceData.answer) {
           setSentenceFeedback('correct');
           setTimeout(() => {
-              setSentenceFeedback(null);
-              setSentenceIndex((prev) => (prev + 1) % GAME_SENTENCES.length);
+              handleNextSentence();
           }, 1500);
       } else {
           setSentenceFeedback('incorrect');
@@ -267,15 +360,19 @@ export const VocabularyList: React.FC<VocabularyListProps> = ({ words }) => {
      return themes[index % themes.length];
   };
 
-  // Initialize all games once on load
+  // Initialize Queues and Start Games on Load
+  // Use a ref to prevent double-initialization in React Strict Mode if necessary, 
+  // but useEffect with empty dependency is usually fine for this logic.
+  // We check if "current" item is null to trigger the first fetch.
   useEffect(() => {
     if (gameWords.length > 0) {
         if (!matchWord) handleNextMatch();
         if (!emojiWord) handleNextEmoji();
         if (!spellingWord) handleNextSpelling();
         if (!bubbleTarget) handleNextBubble();
+        if (!currentSentenceData) handleNextSentence();
     }
-  }, [gameWords]);
+  }, [gameWords]); // Depend on gameWords availability
 
   return (
     <div className="max-w-7xl mx-auto pb-48 px-4">
@@ -526,45 +623,47 @@ export const VocabularyList: React.FC<VocabularyListProps> = ({ words }) => {
                <div className="bg-white rounded-[3rem] p-8 md:p-12 border-[6px] border-emerald-200 shadow-2xl relative text-center overflow-hidden">
                   <div className="absolute top-0 left-1/2 -translate-x-1/2 bg-emerald-200 text-emerald-800 px-8 py-2 rounded-b-3xl font-black text-xl shadow-sm">Game 4: Sentences ✍️</div>
 
-                  <div className="mt-12 space-y-8 relative z-10">
-                       {sentenceFeedback === 'correct' && (
-                             <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
-                                 <div className="text-9xl animate-bounce filter drop-shadow-lg">🌟</div>
-                             </div>
-                        )}
-                        {sentenceFeedback === 'incorrect' && (
-                             <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
-                                 <div className="text-9xl animate-shake filter drop-shadow-lg">❌</div>
-                             </div>
-                        )}
+                  {currentSentenceData && (
+                    <div className="mt-12 space-y-8 relative z-10">
+                        {sentenceFeedback === 'correct' && (
+                                <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
+                                    <div className="text-9xl animate-bounce filter drop-shadow-lg">🌟</div>
+                                </div>
+                            )}
+                            {sentenceFeedback === 'incorrect' && (
+                                <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
+                                    <div className="text-9xl animate-shake filter drop-shadow-lg">❌</div>
+                                </div>
+                            )}
 
-                        <div className="bg-emerald-50 p-8 rounded-[2.5rem] border-4 border-emerald-100 flex items-center justify-center min-h-[140px]">
-                             <p className="text-3xl md:text-4xl font-bold text-gray-700 font-['Comic_Neue'] leading-relaxed">
-                                {GAME_SENTENCES[sentenceIndex].sentence.split('___').map((part, i, arr) => (
-                                    <span key={i}>
-                                        {part}
-                                        {i < arr.length - 1 && (
-                                            <span className="inline-block min-w-[100px] border-b-[5px] border-emerald-400 mx-2 text-emerald-600 px-2 bg-white rounded-lg shadow-sm">
-                                                {sentenceFeedback === 'correct' ? GAME_SENTENCES[sentenceIndex].answer : '?'}
-                                            </span>
-                                        )}
-                                    </span>
+                            <div className="bg-emerald-50 p-8 rounded-[2.5rem] border-4 border-emerald-100 flex items-center justify-center min-h-[140px]">
+                                <p className="text-3xl md:text-4xl font-bold text-gray-700 font-['Comic_Neue'] leading-relaxed">
+                                    {currentSentenceData.sentence.split('___').map((part, i, arr) => (
+                                        <span key={i}>
+                                            {part}
+                                            {i < arr.length - 1 && (
+                                                <span className="inline-block min-w-[100px] border-b-[5px] border-emerald-400 mx-2 text-emerald-600 px-2 bg-white rounded-lg shadow-sm">
+                                                    {sentenceFeedback === 'correct' ? currentSentenceData.answer : '?'}
+                                                </span>
+                                            )}
+                                        </span>
+                                    ))}
+                                </p>
+                            </div>
+
+                            <div className="flex flex-wrap justify-center gap-4">
+                                {currentSentenceData.options.map((opt, idx) => (
+                                    <button
+                                        key={idx}
+                                        onClick={() => handleSentenceGuess(opt)}
+                                        className="bg-white border-b-[6px] border-emerald-200 text-emerald-800 px-8 py-4 rounded-2xl text-2xl font-black hover:bg-emerald-50 hover:border-emerald-300 hover:-translate-y-1 active:border-b-0 active:translate-y-2 transition-all shadow-sm"
+                                    >
+                                        {opt}
+                                    </button>
                                 ))}
-                             </p>
-                        </div>
-
-                        <div className="flex flex-wrap justify-center gap-4">
-                            {GAME_SENTENCES[sentenceIndex].options.map((opt, idx) => (
-                                <button
-                                    key={idx}
-                                    onClick={() => handleSentenceGuess(opt)}
-                                    className="bg-white border-b-[6px] border-emerald-200 text-emerald-800 px-8 py-4 rounded-2xl text-2xl font-black hover:bg-emerald-50 hover:border-emerald-300 hover:-translate-y-1 active:border-b-0 active:translate-y-2 transition-all shadow-sm"
-                                >
-                                    {opt}
-                                </button>
-                            ))}
-                        </div>
-                  </div>
+                            </div>
+                    </div>
+                  )}
               </div>
 
                {/* Game 5: Bubble Pop */}

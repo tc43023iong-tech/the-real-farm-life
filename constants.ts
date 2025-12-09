@@ -595,7 +595,20 @@ export const VOCABULARY_DATA: VocabularyWord[] = [
     example: "We go on a tour.",
     image: "https://images.unsplash.com/photo-1533552084795-305716e91f6e?auto=format&fit=crop&q=80&w=400",
     hideFromList: true
-  }
+  },
+  // Phonics Helpers - Ensure these exist for Chinese mapping in PhonicsStation
+  { word: "farm", emoji: "🚜", phonetic: "/fɑːm/", chinese: "農場", example: "Farm.", image: "", hideFromList: true },
+  { word: "park", emoji: "🏞️", phonetic: "/pɑːk/", chinese: "公園", example: "Park.", image: "", hideFromList: true },
+  { word: "start", emoji: "🏁", phonetic: "/stɑːt/", chinese: "開始", example: "Start.", image: "", hideFromList: true },
+  { word: "barbecue", emoji: "🍖", phonetic: "/ˈbɑːbɪkjuː/", chinese: "燒烤", example: "Barbecue.", image: "", hideFromList: true },
+  { word: "beach", emoji: "🏖️", phonetic: "/biːtʃ/", chinese: "海灘", example: "Beach.", image: "", hideFromList: true },
+  { word: "meat", emoji: "🥩", phonetic: "/miːt/", chinese: "肉", example: "Meat.", image: "", hideFromList: true },
+  { word: "clean", emoji: "🧹", phonetic: "/kliːn/", chinese: "清潔", example: "Clean.", image: "", hideFromList: true },
+  { word: "eat", emoji: "🍽️", phonetic: "/iːt/", chinese: "吃", example: "Eat.", image: "", hideFromList: true },
+  { word: "cow", emoji: "🐄", phonetic: "/kaʊ/", chinese: "母牛", example: "Cow.", image: "", hideFromList: true },
+  { word: "now", emoji: "⏱️", phonetic: "/naʊ/", chinese: "現在", example: "Now.", image: "", hideFromList: true },
+  { word: "how", emoji: "❓", phonetic: "/haʊ/", chinese: "如何", example: "How?", image: "", hideFromList: true },
+  { word: "brown", emoji: "🟤", phonetic: "/braʊn/", chinese: "棕色", example: "Brown.", image: "", hideFromList: true }
 ];
 
 export const PHONICS_DATA: PhonicsRule[] = [
@@ -603,19 +616,19 @@ export const PHONICS_DATA: PhonicsRule[] = [
     symbol: "ar",
     soundName: "/ɑː/",
     description: "Open your mouth wide and say 'Ah'.",
-    examples: ["Farm 🚜", "Park 🏞️", "Start 🏁", "Barbecue 🍖"] 
+    examples: ["farm 🚜", "park 🏞️", "start 🏁", "barbecue 🍖"] 
   },
   {
     symbol: "ea",
     soundName: "/iː/",
     description: "Smile big and make a long 'E' sound.",
-    examples: ["Beach 🏖️", "Meat 🥩", "Clean 🧹", "Eat 🍽️"]
+    examples: ["beach 🏖️", "meat 🥩", "clean 🧹", "eat 🍽️"]
   },
   {
     symbol: "ow",
     soundName: "/aʊ/",
     description: "Like when you get hurt: 'Ow!'",
-    examples: ["Cow 🐄", "Now ⏱️", "How ❓", "Brown 🟤"]
+    examples: ["cow 🐄", "now ⏱️", "how ❓", "brown 🟤"]
   }
 ];
 
@@ -625,17 +638,18 @@ export const WARMUP_QUESTIONS: WarmUpQuestion[] = [
     question: "Do you like playing games?",
     chineseQuestion: "你喜歡玩遊戲嗎？",
     answers: [
-      { text: "Yes, I love games!", icon: "🎮" },
+      { text: "Yes, I do!", icon: "🎮" },
       { text: "No, I like sports.", icon: "⚽" },
-      { text: "I like reading books.", icon: "📚" },
-      { text: "I like watching TV.", icon: "📺" },
-      { text: "I like drawing.", icon: "🎨" },
-      { text: "I like cooking.", icon: "🍳" },
-      { text: "I like music.", icon: "🎵" },
-      { text: "I like dancing.", icon: "💃" },
-      { text: "I like sleeping.", icon: "😴" },
-      { text: "I like swimming.", icon: "🏊" },
-      { text: "I like hiking.", icon: "🥾" }
+      { text: "No, I like books.", icon: "📚" },
+      { text: "No, I like TV.", icon: "📺" },
+      { text: "No, I like drawing.", icon: "🎨" },
+      { text: "No, I like music.", icon: "🎵" },
+      { text: "No, I like dancing.", icon: "💃" },
+      { text: "No, I like sleeping.", icon: "😴" },
+      { text: "No, I like swimming.", icon: "🏊" },
+      { text: "No, I like running.", icon: "🏃" },
+      { text: "No, I like eating.", icon: "🍕" },
+      { text: "No, I like pets.", icon: "🐶" }
     ]
   },
   {
@@ -643,17 +657,56 @@ export const WARMUP_QUESTIONS: WarmUpQuestion[] = [
     question: "Have you been to a farm?",
     chineseQuestion: "你有去過農場嗎？",
     answers: [
-      { text: "Yes, I have!", icon: "🚜" },
+      { text: "Yes, it was fun!", icon: "😄" },
       { text: "No, never.", icon: "❌" },
-      { text: "I want to go!", icon: "🤩" },
-      { text: "I saw a cow there!", icon: "🐄" },
-      { text: "It was smelly!", icon: "🤢" },
-      { text: "I picked strawberries!", icon: "🍓" },
-      { text: "I rode a horse!", icon: "🐎" },
-      { text: "I fed the sheep.", icon: "🐑" },
-      { text: "I ate ice cream.", icon: "🍦" },
-      { text: "I scared of bugs.", icon: "🐛" },
-      { text: "It was too hot.", icon: "☀️" }
+      { text: "I saw a cow.", icon: "🐄" },
+      { text: "I saw a pig.", icon: "🐷" },
+      { text: "I saw a sheep.", icon: "🐑" },
+      { text: "I saw a horse.", icon: "🐎" },
+      { text: "I saw a duck.", icon: "🦆" },
+      { text: "I ate fruit.", icon: "🍎" },
+      { text: "I ate corn.", icon: "🌽" },
+      { text: "It was hot.", icon: "☀️" },
+      { text: "It was big.", icon: "🏞️" },
+      { text: "I want to go!", icon: "🙋" }
+    ]
+  },
+  {
+    id: "wq3",
+    question: "What animals do you like?",
+    chineseQuestion: "你喜歡什麼動物？",
+    answers: [
+       { text: "I like dogs.", icon: "🐶" },
+       { text: "I like cats.", icon: "🐱" },
+       { text: "I like rabbits.", icon: "🐰" },
+       { text: "I like birds.", icon: "🐦" },
+       { text: "I like fish.", icon: "🐟" },
+       { text: "I like cows.", icon: "🐄" },
+       { text: "I like pigs.", icon: "🐷" },
+       { text: "I like sheep.", icon: "🐑" },
+       { text: "I like horses.", icon: "🐎" },
+       { text: "I like ducks.", icon: "🦆" },
+       { text: "I like lions.", icon: "🦁" },
+       { text: "I like tigers.", icon: "🐯" }
+    ]
+  },
+  {
+    id: "wq4",
+    question: "What fruit do you like?",
+    chineseQuestion: "你喜歡什麼水果？",
+    answers: [
+       { text: "I like apples.", icon: "🍎" },
+       { text: "I like bananas.", icon: "🍌" },
+       { text: "I like oranges.", icon: "🍊" },
+       { text: "I like pears.", icon: "🍐" },
+       { text: "I like grapes.", icon: "🍇" },
+       { text: "I like strawberries.", icon: "🍓" },
+       { text: "I like watermelons.", icon: "🍉" },
+       { text: "I like peaches.", icon: "🍑" },
+       { text: "I like cherries.", icon: "🍒" },
+       { text: "I like pineapples.", icon: "🍍" },
+       { text: "I like mangoes.", icon: "🥭" },
+       { text: "I like lemons.", icon: "🍋" }
     ]
   }
 ];
